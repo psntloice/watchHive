@@ -1,0 +1,49 @@
+/* styles/Sidebar.module.css */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -16rem; /* Adjust width based on your design */
+    width: 16rem;
+    height: 100vh;
+    background-color: #333;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .toggleButton {
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .nav {
+    margin-top: 4rem; /* Adjust based on your header height */
+  }
+  
+  .navList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navList li {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .navList a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+  }
+  
+  .navList a:hover {
+    background-color: #444;
+  }
+  

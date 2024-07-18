@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('type');
-        $table->foreignId('genre_id')->constrained();
-        $table->foreignId('author_id')->constrained();
+        $table->foreignId('genre_id');
+        $table->foreignId('author_id');
         $table->string('picture_url')->nullable();
         $table->date('first_release_date')->nullable(); // Add first release date
         $table->date('next_release_date')->nullable(); // Add next release date
