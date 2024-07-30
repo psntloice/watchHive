@@ -16,7 +16,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
   }
   
   .image_container img {
@@ -29,8 +28,13 @@
     width: 100%;
     max-height: 32vh;
     height: 32vh;
-    background-color: beige;
     margin-top: 2rem;
+  }
+  .carousel_container .slide {
+   max-width: 20vw;
+   margin: 1rem;
+   background-color: beige;
+
   }
   
   .carousel_container img{

@@ -1,0 +1,58 @@
+.carousel_container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 20px;
+  }
+  
+  .carousel_container form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .carousel_container form div {
+    margin-bottom: 10px;
+  }
+  
+  .carousel_container form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .carousel_container form input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .carousel_container form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .carousel_container form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .slide {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* Adjust the height as needed */
+    flex-direction: column;
+  }
+  
+  .slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+  

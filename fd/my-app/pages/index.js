@@ -155,11 +155,18 @@ import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const settings = {
-    dots: true,
-    infinite: true,
+    // dots: true,
+    // infinite: true,
+    // speed: 500,
+    // slidesToShow: 1,
+    // slidesToScroll: 1
+
+    infinite: false,
     speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
+    slidesToShow: 3, // Adjust this based on the number of images you want visible at once
+    slidesToScroll: 1, // Number of slides to scroll at once
+    // arrows: true, // Show next/prev arrows
+    centerMode: false, // Do not center the active slide
   };
 
   return (
@@ -173,17 +180,26 @@ const Home = () => {
       </div>
       <div className={styles.carousel_container}>
         <Slider {...settings}>
-          <div>
-            <h3>Slide 1</h3>
-            <img src="tv.png" alt="Large Image" />
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
           </div>
-          <div>
-            <h3>Slide 2</h3>
-            <img src="tv.png" alt="Large Image" />
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
           </div>
-          <div>
-            <h3>Slide 3</h3>
-            <img src="tv.png" alt="Large Image" />
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
           </div>
           {/* Add more slides as needed */}
         </Slider>
