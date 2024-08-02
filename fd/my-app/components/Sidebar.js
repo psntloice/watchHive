@@ -14,8 +14,14 @@ import styles from '../styles/Sidebar.module.css';
       </div>
       <nav className={styles.nav}>
         <ul className={styles.navList}>
-          <li><Link href="/">Homesd</Link></li>
-          <li><Link href="/add">Add Movie</Link></li>
+          <li><Link href="/library">Search</Link></li>
+          
+          <li><Link href="/watchlist">Your WatchList</Link></li>
+          <li><Link href="/favourites">Favourites</Link></li>
+          <li><Link href="/releases">Releases</Link></li>
+        <li><Link href="/edit">Edit</Link></li>
+
+          <li><Link href="/">Home</Link></li>
           {/* Add more sidebar links as needed */}
         </ul>
       </nav>

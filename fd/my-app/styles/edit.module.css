@@ -1,0 +1,105 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 100vw;
+  }
+  .container button{
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px;
+  }
+  .upper{
+    display: flex;
+    justify-content: space-evenly;
+  align-items: center;
+height:30vh;
+
+  margin: 5px;
+
+  }
+ 
+  .author{
+    display: flex;
+    justify-content: space-evenly;
+  align-items: center;
+    background-color: #7fb482;
+height: 90%;
+width: 90%;
+  }
+  .actor{
+    background-color: #856060;
+    height: 90%;
+width: 90%;
+  }
+  .genre{
+    background-color: #5c3953;
+    height: 90%;
+    width: 90%;
+  }
+  .down{
+    display: flex;
+    height:55vh;
+justify-content: center;
+  align-items: center;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .buttons button:hover {
+    background-color: #0056b3;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 60px); /* Adjust based on button height */
+    overflow: hidden;
+  }
+  
+  .content > div {
+    flex: 1;
+    overflow: auto;
+  }
+  
+  .expanded {
+    height: 100%;
+  }
+  
+  .collapsed {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+  
+  .expanded-button {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .expanded-button:hover {
+    background-color: #0056b3;
+  }
+  

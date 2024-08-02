@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from '../styles/add.module.css';
+import { addToFavorites } from "../utils/module_call";
 
 const settings = {
   dots: true,
@@ -33,6 +34,11 @@ const MySlider = () => {
     setMovies([...movies, { id, ...newMovie }]);
     setNewMovie({ title: '', image: '' });
   };
+  const sampleMovie = {
+    name: 'Reality'
+  };
+  
+
 
   return (
     <div className={styles.carousel_container}>
@@ -63,6 +69,7 @@ const MySlider = () => {
         </div>
         <button type="submit">Add Movie</button>
       </form>
+      <button onClick={() => addToFavorites(sampleMovie)}>Hey</button>
       <Slider {...settings}>
         {movies.map(movie => (
           <div key={movie.id} className={styles.slide}>

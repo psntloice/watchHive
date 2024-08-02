@@ -152,6 +152,7 @@ import styles from '../styles/Index.module.css';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import {Image} from "@nextui-org/image";
 
 const Home = () => {
   const settings = {
@@ -176,7 +177,12 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.image_container}>
-        <img src="tv.png" alt="Large Image" />
+      <Image
+      width={300}
+      alt="NextUI hero Image"
+      src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    />
+        {/* <img src="tv.png" alt="Large Image" /> */}
       </div>
       <div className={styles.carousel_container}>
         <Slider {...settings}>
