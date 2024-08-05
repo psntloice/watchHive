@@ -3,11 +3,12 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from '../styles/edit.module.css';
-import MovieForm from '../components/Movie';
-import AuthorForm from '../components/Author';
-import GenreForm from '../components/Genre';
-import ActorForm from '../components/Actor';
+import MovieForm from '../components/AddMovie';
+import AuthorForm from '../components/AddAuthor';
+import GenreForm from '../components/AddGenre';
+import ActorForm from '../components/AddActor';
 import { addToFavorites } from "../utils/module_call";
+import {Chip} from "@nextui-org/react";
 
 import {
   Table,
@@ -93,7 +94,7 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
      <div className={styles.container}>
       <div className={styles.upper}>
         <div className={styles.author}>
-        <button>AUTHOR</button>
+        <Chip color="secondary"  variant="light">author</Chip>
         <AuthorForm />
         <div>
         <Table aria-label="Example empty table">
@@ -107,17 +108,20 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
         </div>
 
         <div className={styles.actor}>
-        <button>ACTOR</button>
+        <Chip color="primary"  variant="light">actor</Chip>
+        <ActorForm />
         </div>
 
 <div className={styles.genre}>
 <button>GENRE</button>
+<GenreForm />
 </div>
 
       </div>
       <div className={styles.down}>
-<button>SHOW</button>
+      <Chip color="primary"  variant="light">movies</Chip>
 <MovieForm/>
+
       </div>
       {/* <div className={styles.buttons}>
         <button onClick={toggleAddGenres}>Add Genres</button>

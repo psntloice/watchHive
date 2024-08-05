@@ -18,27 +18,21 @@ const AuthorForm = ({ onAddAuthor }) => {
 
   return (
     <div>
-      <h2>Add Author</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>
-            Name:
-            <input 
-              type="text" 
-              name="name" 
-              value={newAuthor.name} 
-              onChange={handleChange} 
-              required 
-            />
+          
             <Input
-          type="email"
+type="text" 
+name="name" 
+value={newAuthor.name} 
+onChange={handleChange} 
+required 
           color= "primary"
-          label="Email"
-          placeholder="Enter your email"
-          defaultValue="junior@nextui.org"
+          label="Author"
+          placeholder="Enter author's name"
+          defaultValue=" "
           className="max-w-[220px]"
         />
-          </label>
         </div>
         <button type="submit">Add Author</button>
       </form>

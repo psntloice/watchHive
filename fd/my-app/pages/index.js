@@ -178,7 +178,9 @@ const Home = () => {
       </Head>
       <div className={styles.image_container}>
       <Image
-      width={300}
+layout="fill"
+width={"80vw"}
+objectFit="cover"
       alt="NextUI hero Image"
       src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
     />

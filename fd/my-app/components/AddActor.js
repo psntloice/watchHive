@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Input} from "@nextui-org/input";
 
 const ActorForm = ({ onAddActor }) => {
   const [newActor, setNewActor] = useState({ name: '' });
@@ -16,19 +17,21 @@ const ActorForm = ({ onAddActor }) => {
 
   return (
     <div>
-      <h2>Add Actor</h2>
-      <form onSubmit={handleSubmit}>
+     <form onSubmit={handleSubmit}>
         <div>
-          <label>
-            Name:
-            <input 
-              type="text" 
-              name="name" 
-              value={newActor.name} 
-              onChange={handleChange} 
-              required 
-            />
-          </label>
+           
+        <Input
+type="text" 
+name="name" 
+value={newActor.name} 
+onChange={handleChange} 
+required 
+          color= "primary"
+          label="Author"
+          placeholder="Enter author's name"
+          defaultValue=" "
+          className="max-w-[220px]"
+        />
         </div>
         <button type="submit">Add Actor</button>
       </form>

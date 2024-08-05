@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Input} from "@nextui-org/input";
 
 const GenreForm = ({ onAddGenre }) => {
   const [newGenre, setNewGenre] = useState({ name: '' });
@@ -16,20 +17,22 @@ const GenreForm = ({ onAddGenre }) => {
 
   return (
     <div>
-      <h2>Add Genre</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Name:
-            <input 
-              type="text" 
-              name="name" 
-              value={newGenre.name} 
-              onChange={handleChange} 
-              required 
-            />
-          </label>
-        </div>
+      <div>
+           
+           <Input
+   type="text" 
+   name="name" 
+   value={newGenre.name} 
+   onChange={handleChange} 
+   required 
+             color= "primary"
+             label="Author"
+             placeholder="Enter author's name"
+             defaultValue=" "
+             className="max-w-[220px]"
+           />
+           </div>
         <button type="submit">Add Genre</button>
       </form>
     </div>
