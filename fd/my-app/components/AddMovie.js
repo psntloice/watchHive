@@ -8,6 +8,10 @@ import { Uploady } from '@rpldy/uploady';
 import UploadButton from "@rpldy/upload-button";
 import UploadPreview from "@rpldy/upload-preview";
 import styles from '../styles/addmovie.module.css';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import UploadDropZone from "@rpldy/upload-drop-zone";
 
 // import '@rpldy/upload-button/style.css';
 // import '@rpldy/upload-preview/style.css';
@@ -34,25 +38,11 @@ const ActorForm = ({ onAddActor }) => {
       key: "1",
       name: "Tony Reichert",
       role: "CEO",
-      status: "Active",
     },
     {
       key: "2",
-      name: "Zoey Lang",
-      role: "Technical Lead",
-      status: "Paused",
-    },
-    {
-      key: "3",
-      name: "Jane Fisher",
-      role: "Senior Developer",
-      status: "Active",
-    },
-    {
-      key: "4",
-      name: "William Howard",
-      role: "Community Manager",
-      status: "Vacation",
+      name: "Tony Reichert",
+      role: "CEO",
     },
   ];
 
@@ -65,10 +55,7 @@ const ActorForm = ({ onAddActor }) => {
       key: "role",
       label: "ROLE",
     },
-    {
-      key: "status",
-      label: "STATUS",
-    },
+    
   ];
 
   const animals = [
@@ -87,25 +74,32 @@ const ActorForm = ({ onAddActor }) => {
     { key: "crocodile", label: "Crocodile" }
   ];
 
+  const settings = {
+    // dots: true,
+    // infinite: true,
+    // speed: 500,
+    // slidesToShow: 1,
+    // slidesToScroll: 1
 
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3, // Adjust this based on the number of images you want visible at once
+    slidesToScroll: 1, // Number of slides to scroll at once
+    // arrows: true, // Show next/prev arrows
+    centerMode: false, // Do not center the active slide
+  };
 
   return (
     <div className={styles.formdiv}>
-      <div className="flex flex-row h-8/10 bg-gray-200 justify-evenly">
-      <form onSubmit={handleSubmit} >
-        <div className="flex flex-col gap-4">
-          <h3 className="text-default-500 text-small">movies</h3>
+                <h3 className="text-default-500 text-small">movies</h3>
+
+      <div className="flex flex-row  h-3/5 bg-gray-200 justify-evenly">
+      <form onSubmit={handleSubmit} className='flex flex-row w-4/5'>
+        <div className="flex flex-col gap-4 w-3/5">
 
           <div className="flex flex-col gap-2">
             <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
               <Input type="text" name="name" value={newActor.name} onChange={handleChange} required color="primary" label="Title" placeholder="Enter movie/series name" defaultValue=" " className="max-w-[220px]" />
-              <DatePicker label="First Release Date" className="max-w-[284px]" color='primary' isRequired />
-              <DatePicker label="Next Release Date" className="max-w-[284px]" color='primary' />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
               <Select
                 label="Type"
                 variant='bordered'
@@ -121,6 +115,23 @@ const ActorForm = ({ onAddActor }) => {
                   </SelectItem>
                 ))}
               </Select>
+              </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+            <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <DatePicker label="First Release Date" className="max-w-[284px]" color='primary' isRequired />
+              <DatePicker label="Next Release Date" className="max-w-[284px]" color='primary' />
+
+
+             
+            </div>
+          </div>
+                        
+
+          <div className="flex flex-col gap-2">
+            <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+              
 
               <Select
                 label="Author"
@@ -205,20 +216,37 @@ const ActorForm = ({ onAddActor }) => {
                 ))}
               </Select>
 
-              
+             
+
             </div>
           </div>
 
         </div>
+        <div className="flex flex-col gap-4 w-2/5 h-full">
+        <Uploady destination={{ url: "https://my-server.com/upload" }}>
+        <UploadDropZone
+					onDragOverClassName="drag-over"
+					grouped
+					maxGroupSize={3}
+          className='h-3/4'
+				>
+            <span>Drag&Drop File(s) Here</span>
+        </UploadDropZone>
+        <UploadPreview
+            fallbackUrl="https://icon-library.net/images/image-placeholder-icon/image-placeholder-icon-6.jpg"/>
+		<UploadButton/>
+	</Uploady>
+  <button type="submit" className='w-1/4 content-end'>Add</button>
+        </div>
       </form>
 
      
-      <div className={styles.author}>
+      <div className="w-1/5">
         <Table aria-label="Example table with dynamic content">
           <TableHeader columns={columns}>
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
           </TableHeader>
-          <TableBody items={rows}>
+          <TableBody items={rows} style={{ color: '#155e75' }}>
             {(item) => (
               <TableRow key={item.key}>
                 {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
@@ -228,13 +256,34 @@ const ActorForm = ({ onAddActor }) => {
         </Table>
       </div>
 
-      <div>       
-       <button type="submit">Add Actor</button>
-     </div>
+     
           </div>
 
-          <div className="flex flex-row h-2/10 bg-gray-400">
-latest added
+          <div className="h-2/5">
+          <Slider {...settings}>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          <div className={styles.slide}>
+            <img src="tv.png" alt="Image" />
+          </div>
+          {/* Add more slides as needed */}
+        </Slider>
           </div>
     </div>
   );

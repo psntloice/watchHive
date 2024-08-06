@@ -9,6 +9,7 @@ import GenreForm from '../components/AddGenre';
 import ActorForm from '../components/AddActor';
 import { addToFavorites } from "../utils/module_call";
 import {Chip} from "@nextui-org/react";
+import {Card, CardBody, Image, Button} from "@nextui-org/react";
 
 import {
   Table,
@@ -93,28 +94,55 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
   return (
      <div className={styles.container}>
       <div className={styles.upper}>
-        <div className={styles.author}>
-        <Chip color="secondary"  variant="light">author</Chip>
-        <AuthorForm />
-        <div>
-        <Table aria-label="Example empty table">
-      <TableHeader>
-        <TableColumn>NAME</TableColumn>
+        <Card
+      isBlurred
+      className=" border-none bg-sky-200  max-w-[610px]"
+      shadow="sm"
+      fullWidth
+    >
+
+      <CardBody 
+      className=" border-none bg-sky-200"
+      >
+
+      <AuthorForm />
+
+        </CardBody>
+
+        </Card>
         
-      </TableHeader>
-      <TableBody emptyContent={"No rows to display."}>{[]}</TableBody>
-    </Table>
-        </div>
-        </div>
 
         <div className={styles.actor}>
-        <Chip color="primary"  variant="light">actor</Chip>
+        <Card
+      isBlurred
+      className=" border-none bg-sky-200  max-w-[610px]"
+      shadow="sm"
+      fullWidth
+    >
+      <CardBody 
+      className=" border-none bg-sky-200"
+      >
+
         <ActorForm />
+        </CardBody>
+
+</Card>
         </div>
 
 <div className={styles.genre}>
-<button>GENRE</button>
+<Card
+      isBlurred
+      className=" border-none bg-sky-200  max-w-[610px]"
+      shadow="sm"
+      fullWidth
+    >
+      <CardBody 
+      className=" border-none bg-sky-200"
+      >
 <GenreForm />
+</CardBody>
+
+</Card>
 </div>
 
       </div>

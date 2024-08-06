@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {Input} from "@nextui-org/input";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, colorVariants } from "@nextui-org/react";
+
 
 const ActorForm = ({ onAddActor }) => {
   const [newActor, setNewActor] = useState({ name: '' });
@@ -15,10 +17,31 @@ const ActorForm = ({ onAddActor }) => {
     setNewActor({ name: '' });
   };
 
+  const columns = [
+    {
+      key: "name",
+      label: "NAME",
+    },
+   
+    
+  ];
+  const rows = [
+    {
+      key: "1",
+      name: "Tony Reichert",
+      role: "CEO",
+    },
+    {
+      key: "2",
+      name: "Tony Reichert",
+      role: "CEO",
+    },
+  ];
+
   return (
-    <div>
+    <div className='flex flex-row'>
+      <div>
      <form onSubmit={handleSubmit}>
-        <div>
            
         <Input
 type="text" 
@@ -32,9 +55,26 @@ required
           defaultValue=" "
           className="max-w-[220px]"
         />
+        <button type="submit" variant="bordered" style={{ color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+        >Add Actor</button>
+        </form>
         </div>
-        <button type="submit">Add Actor</button>
-      </form>
+                <div>
+
+        <Table aria-label="Example table with dynamic content">
+          <TableHeader columns={columns}>
+            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+          </TableHeader>
+          <TableBody items={rows} style={{ color: '#155e75' }}>
+            {(item) => (
+              <TableRow key={item.key}>
+                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        </div>
+        
     </div>
   );
 };
