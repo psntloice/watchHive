@@ -119,7 +119,6 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
 
       </div>
       <div className={styles.down}>
-      <Chip color="primary"  variant="light">movies</Chip>
 <MovieForm/>
 
       </div>
