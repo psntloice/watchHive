@@ -39,9 +39,8 @@ const ActorForm = ({ onAddActor }) => {
   ];
 
   return (
-    <div className='flex flex-row'>
-      <div>
-     <form onSubmit={handleSubmit}>
+    <div className='flex flex-row '>
+     <form onSubmit={handleSubmit} className=' w-4/6'>
            
         <Input
 type="text" 
@@ -58,8 +57,7 @@ required
         <button type="submit" variant="bordered" style={{ color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
         >Add Actor</button>
         </form>
-        </div>
-                <div>
+                <div className=' w-2/6'>
 
         <Table aria-label="Example table with dynamic content">
           <TableHeader columns={columns}>

@@ -4,11 +4,23 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from '../styles/edit.module.css';
 import MovieForm from '../components/Movie';
+import {Input} from "@nextui-org/input";
+
 
 const Library = () => {
 
     return (
-        <MovieForm/>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '6px' }}>
+        {/* Input Component */}
+        <div style={{ flex: '0 1 8%' }}>
+          <Input type="email" label="Email" style={{ width: '100%' }} />
+        </div>
+      
+        {/* MovieForm Component */}
+        <div style={{ flex: '1' }}>
+          <MovieForm className="w-full bg-white" />
+        </div>
+      </div>
     );
 
 };

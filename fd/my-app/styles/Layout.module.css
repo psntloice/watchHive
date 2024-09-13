@@ -5,13 +5,18 @@
     display: flex;
     min-height: 100vh;
 height: 100vh;
+
     /* flex-direction: column; Ensure that the main content is below the button */
+  }
+  .content{
+    width:100%;
   }
   
   .main {
     flex: 1;
     padding: 1rem;
     height:90vh;
+    width:100%;
   }
   
   .footer {

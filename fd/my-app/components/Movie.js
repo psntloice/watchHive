@@ -42,9 +42,32 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
   const images = [
     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
     // more images
   ];
+  
 
   return (
     // <div>
@@ -181,6 +204,11 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
     //   </form>
     // </div>
     <div>
+    <div  style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+      gap: '16px',
+    }}>
          {images.map((image, index) => (
             <div key={index} style={{ overflow: 'hidden', borderRadius: '8px' }}>
               <Image
@@ -190,13 +218,17 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
                 alt={`Image ${index + 1}`}
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
+              <h1>hjv</h1>
             </div>
           ))}
-         <Image
-      width={300}
-      alt="NextUI hero Image"
-      src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-    />
+     
+     <Image
+    width={300}
+    alt="NextUI hero Image"
+    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
+  />
+    </div>
     </div>
   );
 };

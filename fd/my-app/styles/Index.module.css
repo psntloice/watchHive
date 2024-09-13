@@ -11,7 +11,23 @@
   .mainImage{
     width:100%;
   }
-  
+  @media (min-width: 1068px) {
+    .divimage {
+      height: 60vh;
+      background-position: center ;
+      background-repeat: no-repeat;
+      background-size: contain; /* Adjust for smaller screens */
+
+    }
+  }
+  .divimage{
+    background-position: center ;
+    background-image:url("https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg");
+display: flex;
+background-size: cover;
+background-repeat: no-repeat;
+height: 90vh;
+  }
   .image_container {
 
     width: 100%;

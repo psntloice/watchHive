@@ -37,9 +37,8 @@ const AuthorForm = ({ onAddAuthor }) => {
     },
   ];
   return (
-    <div className='flex flex-row'>
-              <div>
-      <form onSubmit={handleSubmit}>
+    <div className='flex flex-row bg-midnight text-tahiti'>
+      <form onSubmit={handleSubmit} className=' w-4/6'>
             <Input
 type="text" 
 name="name" 
@@ -50,12 +49,11 @@ required
           label="Author"
           placeholder="Enter author's name"
           defaultValue=" "
-          className="max-w-[220px]"
+          className="max-w-[220px] "
         />
          </form>
-         </div>
 
-         <div>
+         <div className=' w-2/6'>
          <Table aria-label="Example table with dynamic content">
           <TableHeader columns={columns}>
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}

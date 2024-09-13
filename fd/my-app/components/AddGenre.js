@@ -36,10 +36,9 @@ const GenreForm = ({ onAddGenre }) => {
     },
   ];
   return (
-    <div className='flex flex-row'>
-            <div>
+    <div className='flex flex-row '>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className=' w-4/6'>
            
            <Input
    type="text" 
@@ -54,8 +53,7 @@ const GenreForm = ({ onAddGenre }) => {
              className="max-w-[220px]"
            />
            </form>
-           </div>
-           <div>
+           <div className=' w-2/6'>
             <Table aria-label="Example table with dynamic content">
           <TableHeader columns={columns}>
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}

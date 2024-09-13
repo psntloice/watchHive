@@ -169,14 +169,91 @@ const Home = () => {
     // arrows: true, // Show next/prev arrows
     centerMode: false, // Do not center the active slide
   };
-
+  const images = [
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
+    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    // more images
+  ];
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Movie Watchlist</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className={styles.image_container}>
+    <div style={{ display: 'flex', flexDirection:'column', gap: '16px', minHeight:'95vh' }}>
+  <Head>
+    <title>Movie Watchlist</title>
+    <link rel="icon" href="/favicon.ico" />
+  </Head>
+  
+  {/* Large Background Image Section */}
+  <div style={{
+    flex: '2',
+    position: 'relative', // Relative to position the slider correctly
+    backgroundRepeat: 'no-repeat',
+    height: '95vh',
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'right',
+  }}>
+     {/* Small Background Image Section */}
+    <div className={styles.divimage}>
+      {/* Content and Overlay */}
+      <div style={{
+        position: 'absolute',
+        left: '0',
+        bottom: '0',
+        height: '90%',
+        background: 'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'left',
+      }}>
+        <div style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          color: '#fff',
+          padding: '20px',
+          borderRadius: '10px',
+          maxWidth: '80%',
+          textAlign: 'center',
+        }}>
+          <h2>Image Details</h2>
+          <p>Some interesting details about the image go here.</p>
+        </div>
+      </div>
+      
+    </div>
+    
+    {/* Slider Positioned on Top */}
+    <div style={{
+      position: 'absolute',
+      bottom: '0', // Adjust the position as needed
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '80%', // Adjust width as needed
+      zIndex: 2, // Ensure it appears above other content
+    }}>
+      <Slider {...settings}>
+        {images.map((image, index) => (
+          <div key={index} style={{ maxHeight: '187px' }}>
+            <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }} />
+          </div>
+        ))}
+      </Slider>
+    </div> 
+  </div>
+</div>
+
+
+  );
+};
+
+export default Home;
+
+  {/* <div className={styles.image_container}>
       <Image
 layout="fill"
 width={"80vw"}
@@ -184,38 +261,4 @@ objectFit="cover"
       alt="NextUI hero Image"
       src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
     />
-        {/* <img src="tv.png" alt="Large Image" /> */}
-      </div>
-      <div className={styles.carousel_container}>
-        <Slider {...settings}>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          <div className={styles.slide}>
-            <img src="tv.png" alt="Image" />
-          </div>
-          {/* Add more slides as needed */}
-        </Slider>
-      </div>
-    </div>
-  );
-};
-
-export default Home;
-
-
+      </div> */}

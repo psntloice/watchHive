@@ -88,18 +88,3 @@ import { MenuIcon } from '@heroicons/react/outline'; // Import from Heroicons or
 
 export default Layout;
 
-// import Head from 'next/head';
-
-// const Layout = ({ children }) => (
-//   <>
-//     <Head>
-//       <title>WatchHive</title>
-//       <link rel="icon" href="/favicon.ico" />
-//     </Head>
-//     <Navbar />
-//    <main>{children}</main>
-//      <Footer />
-//   </>
-// );
-
-// export default Layout;

@@ -26,11 +26,22 @@ module.exports = {
         "pointer-events-none",
       ],
     },
+    
     colors: {
       primary : {
         background: "#FAA0BF",
-      }
-    }
+      },
+      transparent: 'transparent',
+      current: 'currentColor',
+      'white': '#ffffff',
+      'purple': '#3f3cbb',
+      'bgwhite': '#eff6ff',
+      'metal': '#565584',
+      'tahiti': '#3ab7bf',
+      'silver': '#ecebff',
+      'bubble-gum': '#ff77e9',
+      'bermuda': '#78dcca',
+    },
   },
   plugins: [nextui({
     addCommonColors: true,

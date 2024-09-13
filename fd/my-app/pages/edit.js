@@ -8,8 +8,8 @@ import AuthorForm from '../components/AddAuthor';
 import GenreForm from '../components/AddGenre';
 import ActorForm from '../components/AddActor';
 import { addToFavorites } from "../utils/module_call";
-import {Chip} from "@nextui-org/react";
-import {Card, CardBody, Image, Button} from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
+import { Card, CardBody, Image, Button } from "@nextui-org/react";
 
 import {
   Table,
@@ -34,7 +34,7 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
 
 
 
-  
+
   const [showAddMovies, setShowAddMovies] = useState(false);
   const [showAddAuthors, setShowAddAuthors] = useState(true);
   const [showAddGenres, setShowAddGenres] = useState(true);
@@ -92,65 +92,30 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
   ];
 
   return (
-     <div className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.upper}>
-        <Card
-      isBlurred
-      className=" border-none bg-sky-200  max-w-[610px]"
-      shadow="sm"
-      fullWidth
-    >
-
-      <CardBody 
-      className=" border-none bg-sky-200"
-      >
-
-      <AuthorForm />
-
-        </CardBody>
-
-        </Card>
-        
-
-        <div className={styles.actor}>
-        <Card
-      isBlurred
-      className=" border-none bg-sky-200  max-w-[610px]"
-      shadow="sm"
-      fullWidth
-    >
-      <CardBody 
-      className=" border-none bg-sky-200"
-      >
-
-        <ActorForm />
-        </CardBody>
-
-</Card>
+        <div  style={{  background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)'}} className=" rounded-lg   w-2/6 h-full bg-blue-100 bg-opacity-{25} shadow-2xl shadow-[0px_10px_30px_rgba(196, 181, 253)]"> 
+        <AuthorForm />
         </div>
-
-<div className={styles.genre}>
-<Card
-      isBlurred
-      className=" border-none bg-sky-200  max-w-[610px]"
-      shadow="sm"
-      fullWidth
-    >
-      <CardBody 
-      className=" border-none bg-sky-200"
-      >
-<GenreForm />
-</CardBody>
-
-</Card>
-</div>
-
+        <div  className={styles.actor}>
+        <ActorForm />
+        </div>
+        <div className={styles.genre}>
+        <GenreForm/>
+        </div>
       </div>
       <div className={styles.down}>
-<MovieForm/>
-
+         <MovieForm /> {/*this has errors on ui */}
       </div>
-      {/* <div className={styles.buttons}>
+    </div>
+
+  );
+};
+
+export default MyEdits;
+
+
+  {/* <div className={styles.buttons}>
         <button onClick={toggleAddGenres}>Add Genres</button>
         <button onClick={toggleAddAuthors}>Add Authors</button>
         <button onClick={toggleAddActors}>Add Actors</button>
@@ -173,8 +138,3 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
       <button className={styles.expanded-button} onClick={toggleAddMovies}>
         {showAddMovies ? 'Hide Add Movies' : 'Show Add Movies'}
       </button> */}
-    </div>
-  );
-};
-
-export default MyEdits;
