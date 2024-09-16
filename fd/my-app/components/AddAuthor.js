@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import {Input} from "@nextui-org/input";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, colorVariants } from "@nextui-org/react";
 
 
 const AuthorForm = ({ onAddAuthor }) => {
+  const movies = [
+    { id: 1, title: 'Movie 1', description: 'Details about Movie 1', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 2, title: 'Movie 2', description: 'Details about Movie 2', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 3, title: 'Movie 3', description: 'Details about Movie 3', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 4, title: 'Movie 4', description: 'Details about Movie 4', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 5, title: 'Movie 5', description: 'Details about Movie 5', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 6, title: 'Movie 6', description: 'Details about Movie 6', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+    { id: 7, title: 'Movie 7', description: 'Details about Movie 7', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
+
+    // Add more movie objects as needed
+  ];
   const [newAuthor, setNewAuthor] = useState({ name: '' });
 
   const handleChange = (e) => {
@@ -37,8 +47,8 @@ const AuthorForm = ({ onAddAuthor }) => {
     },
   ];
   return (
-    <div className='flex flex-row bg-midnight text-tahiti'>
-      <form onSubmit={handleSubmit} className=' w-4/6'>
+    <div className='flex flex-row h-full bg-midnight text-tahiti p-4'>
+      <form onSubmit={handleSubmit} className=' w-3/6'>
             <Input
 type="text" 
 name="name" 
@@ -53,19 +63,13 @@ required
         />
          </form>
 
-         <div className=' w-2/6'>
-         <Table aria-label="Example table with dynamic content">
-          <TableHeader columns={columns}>
-            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-          </TableHeader>
-          <TableBody items={rows} style={{ color: '#155e75' }}>
-            {(item) => (
-              <TableRow key={item.key}>
-                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+         <div className=' w-3/6 pb-px' style={{ overflowY: 'auto', maxHeight: '80vh', background: 'transparent', border: '2px', borderRadius: '15px' }}>
+         {movies.map((movie) => (
+              <div key={movie.id} className='text-sm subpixel-antialiased p-px' style={{ minHeight:'25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
+                                 <h3>{movie.title}</h3>
+
+              </div>
+            ))}
         </div>
 </div>     
   );
