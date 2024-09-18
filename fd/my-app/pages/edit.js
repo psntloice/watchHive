@@ -90,12 +90,35 @@ const MyEdits = ({ isOpen, onRequestClose, onSubmit, formData, handleChange }) =
     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
     // more images
   ];
+  const [expandedDiv, setExpandedDiv] = useState(null);
 
+  const toggleDiv = (div) => {
+    setExpandedDiv(expandedDiv === div ? null : div); // Toggle the div expansion
+    console.log("clicked");
+  };
   return (
     <div className={styles.container}>
       <div className={styles.upper}>
-        <div  style={{  background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)'}} className=" rounded-lg   w-2/6 h-full bg-blue-100 bg-opacity-{25} shadow-2xl shadow-[0px_10px_30px_rgba(196, 181, 253)]"> 
+        <div   style={{
+          background: `
+          url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-size="30" fill="rgba(0,0,0,0.1)" text-anchor="middle" alignment-baseline="middle">Background Text</text></svg>') no-repeat center,
+          rgba(0, 0, 0, 0.1)`,
+          backgroundColor: "transparent",
+          border: "1px outset #4058b9",
+          cursor: "pointer",
+          transition: "all 0.3s ease",
+          overflow: "hidden",
+          height: expandedDiv === "div" ? "auto" : "20%",
+        }}
+        className="rounded-lg   w-2/6"
+              onClick={() => toggleDiv("div")}>
+                {expandedDiv === "div" && (
+        <div  style={{ width:'100%',  background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)'}}
+         className=" rounded-lg h-full bg-opacity-{25} shadow-2xl shadow-[0px_10px_30px_rgba(196, 181, 253)]"> 
         <AuthorForm />
+        
+        </div>
+          )}
         </div>
         <div  className={styles.actor}>
         <ActorForm />

@@ -286,7 +286,7 @@ const ActorForm = ({ onAddActor }) => {
             </div>
           </div>
           <div style={{ height: '12%', display: 'flex', justifyContent: 'space-around' }}>
-            <button type="submit" className='w-1/6 h-full border-y-8 rounded-s-3xl bg-gradient-to-br from-blue-800 to-purple-400 w-1/6 h-2/3 content-end'>
+            <button type="submit" className='w-1/6 h-full border-y-8 rounded-s-3xl bg-gradient-to-br from-blue-500 to-purple-600 w-1/6 h-2/3 content-end'>
             Add</button>
 
           </div>
@@ -294,7 +294,7 @@ const ActorForm = ({ onAddActor }) => {
 
 
         <div style={{ position: 'relative', height: '100%', justifyContent: 'center', color: 'black' }} className="w-1/4">
-          <div style={{ overflowY: 'auto', maxHeight: '80vh', padding: '10px', background: 'linear-gradient(to top, #4755ed 5%, #babccf 30%)', height: '43vh', border: '0px', borderRadius: '15px' }}>
+          <div style={{ overflowY: 'auto', maxHeight: '80vh', padding: '10px', background: 'linear-gradient(to top, #4058b9  5%, #babccf 30%)', height: '43vh', border: '0px', borderRadius: '15px' }}>
             {movies.map((movie) => (
               <div key={movie.id} style={{ marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: 'transparent' }}>
                 <div

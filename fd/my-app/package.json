@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "@heroicons/react": "^1.0.6",
     "@nextui-org/date-picker": "^2.1.6",
     "@nextui-org/image": "^2.0.31",
