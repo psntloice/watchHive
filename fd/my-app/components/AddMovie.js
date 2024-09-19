@@ -145,11 +145,12 @@ const ActorForm = ({ onAddActor }) => {
 
               <div className="flex flex-col gap-2 ">
                 <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4 justify-evenly">
-                  <Input type="text" name="name" value={newActor.name} onChange={handleChange} required color="primary" label="Title" placeholder="Enter movie/series name" defaultValue=" " className="max-w-[220px]" />
+                  <Input type="text" name="name" value={newActor.name} onChange={handleChange} required color="primary" label="Title" placeholder="Enter movie/series name" defaultValue=" " className="max-w-[220px]"                     style={{  background: '#E6F1FE'}}
+                  />
                   <Select
                     label="Type"
                     variant='bordered'
-                    style={{ color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderRadius: '15px', borderBlockColor: 'yellow' }}
+                    style={{  background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderRadius: '15px', borderBlockColor: 'yellow' }}
                     className="max-w-52 "
                   >
                     {animals.map((animal) => (
@@ -166,7 +167,7 @@ const ActorForm = ({ onAddActor }) => {
 
               <div className="flex flex-col gap-2 ">
                 <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4 justify-evenly">
-                  <DatePicker label="First Release Date" className="max-w-[284px]" color='primary' isRequired />
+                  <DatePicker label="First Release Date" className="max-w-[284px] " color='primary' isRequired />
                   <DatePicker label="Next Release Date" className="max-w-[284px]" color='primary' />
 
 
@@ -181,9 +182,9 @@ const ActorForm = ({ onAddActor }) => {
 
                   <Select
                     label="Author"
-                    style={{ borderRadius: '15px', color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+                    style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
                     variant='bordered'
-                    className="max-w-52"
+                    className="max-w-52 text-blue-500"
                   >
                     {animals.map((animal) => (
                       <SelectItem
@@ -198,7 +199,7 @@ const ActorForm = ({ onAddActor }) => {
                     label="Genre"
                     className="max-w-52"
                     variant='bordered'
-                    style={{ borderRadius: '15px', color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+                    style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
                   >
                     {animals.map((animal) => (
                       <SelectItem
@@ -218,7 +219,7 @@ const ActorForm = ({ onAddActor }) => {
                     label="Has Sequel?"
                     className="max-w-28"
                     variant='bordered'
-                    style={{ borderRadius: '15px', color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+                    style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
                   >
                     {animals.map((animal) => (
                       <SelectItem
@@ -233,7 +234,7 @@ const ActorForm = ({ onAddActor }) => {
                   <Select
                     label="Sequel"
                     variant='bordered'
-                    style={{ borderRadius: '15px', color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+                    style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
                     className="max-w-52"
                   >
                     {animals.map((animal) => (
@@ -250,7 +251,7 @@ const ActorForm = ({ onAddActor }) => {
                     label="Is Upcoming?"
                     className="max-w-40"
                     variant='bordered'
-                    style={{ borderRadius: '15px', color: '#155e75', background: '#bfdbfe', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
+                    style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE', borderWidth: '200px', borderColor: 'yellow', borderBlockColor: 'yellow' }}
                   >
                     {animals.map((animal) => (
                       <SelectItem

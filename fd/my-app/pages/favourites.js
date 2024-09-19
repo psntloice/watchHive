@@ -69,33 +69,86 @@ const Favourites = ({ onAddMovie, genres, authors }) => {
     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
     // more images
   ];
-  
+  const [switchStates, setSwitchStates] = useState({
+    genre: false,
+    actor: false,
+    author: false,
+  });
+
+  // Function to toggle a specific switch
+  const toggleSwitch = (switchName) => {
+    setSwitchStates((prevStates) => ({
+      ...prevStates,
+      [switchName]: !prevStates[switchName], // Toggle the specific switch
+    }));
+  };
+ 
 
   return (
   
     <div>
-    <div>
-    <Switch 
-     color="success"
-     defaultSelected>
-      Genre
-    </Switch>
-    <Switch defaultSelected>
-      Actor
-    </Switch>
-    <Switch defaultSelected>
-      Author
-    </Switch>
-    <Switch
-      defaultSelected
-      size="lg"
-      color="success"
-      
+      <div style={{
+      display: 'flex',
+      gap: '16px',
+    }}>
+      <div>
+      {/* Label Text */}
+    <label onClick={() =>toggleSwitch('genre')} className="text-gray-700 cursor-pointer">
+        Genre
+      </label>
+    <div 
+      onClick={() =>toggleSwitch('genre')}
+      className={`w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out ${
+        switchStates.genre ? 'bg-blue-500' : 'bg-gray-300'
+      }`}
     >
-      Dark mode
-    </Switch>
-    
+       
+      <div
+        className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+          switchStates.genre ? 'translate-x-6' : ''
+        }`}
+      ></div>
     </div>
+    </div>
+    <div>
+      {/* Label Text */}
+      <label onClick={() =>toggleSwitch('actor')} className="text-gray-700 cursor-pointer">
+Actor      </label>
+    <div 
+      onClick={() =>toggleSwitch('actor')}
+      className={`w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out ${
+        switchStates.actor ? 'bg-blue-500' : 'bg-gray-300'
+      }`}
+    >
+       
+      <div
+        className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+          switchStates.actor ? 'translate-x-6' : ''
+        }`}
+      ></div>
+    </div>
+    </div>
+    <div>
+      {/* Label Text */}
+      <label onClick={() =>toggleSwitch('author')} className="text-gray-700 cursor-pointer">
+Author      </label>
+    <div 
+      onClick={() =>toggleSwitch('author')}
+      className={`w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer transition-all duration-300 ease-in-out ${
+        switchStates.author ? 'bg-blue-500' : 'bg-gray-300'
+      }`}
+    >
+       
+      <div
+        className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ease-in-out ${
+          switchStates.author ? 'translate-x-6' : ''
+        }`}
+      ></div>
+    </div>
+    </div>
+ </div>
+
+
     <div  style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
@@ -121,6 +174,7 @@ const Favourites = ({ onAddMovie, genres, authors }) => {
     style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
   />
     </div>
+
     </div>
   );
 };

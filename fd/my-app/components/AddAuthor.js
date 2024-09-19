@@ -26,33 +26,14 @@ const AuthorForm = ({ onAddAuthor }) => {
     onAddAuthor(newAuthor);
     setNewAuthor({ name: '' });
   };
-  const columns = [
-    {
-      key: "name",
-      label: "NAME",
-    },
-   
-    
-  ];
-  const rows = [
-    {
-      key: "1",
-      name: "Tony Reichert",
-      role: "CEO",
-    },
-    {
-      key: "2",
-      name: "Tony Reichert",
-      role: "CEO",
-    },
-  ];
+ 
   const toggleMovie = (id) => {
     setActiveMovieId(activeMovieId === id ? null : id);
   };
   const [activeMovieId, setActiveMovieId] = useState(null);
 
   return (
-    <div className='flex flex-row h-full bg-midnight text-tahiti p-4 gap-2'>
+    <div className='flex flex-row h-full bg-midnight text-tahiti p-2 gap-2'>
       <form onSubmit={handleSubmit} className=' w-2/5 h-full gap-2 flex flex-col justify-items-center py-4'>
             <Input
 type="text" 
