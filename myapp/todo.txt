@@ -1,0 +1,7 @@
+Ensure you make error handling manageable in crud of all
+
+Make description nullable 
+
+add fillable to the db attributes in the models
+work on the controllers use where for update restrict from using find and also the correct responses in cases of success and failures
+

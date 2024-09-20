@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AuthorController extends Controller
 {
@@ -21,9 +22,9 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'bio' => 'nullable|string',
+            'description' => 'required|string',
         ]);
-
+        Log::info('This is an informational message.');
         return Author::create($request->all());
     }
 

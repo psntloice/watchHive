@@ -288,7 +288,7 @@ const ActorForm = ({ onAddActor }) => {
           </div>
           <div style={{ height: '12%', display: 'flex', justifyContent: 'space-around' }}>
             <button type="submit" className='w-1/6 h-full border-y-8 rounded-s-3xl bg-gradient-to-br from-blue-500 to-purple-600 w-1/6 h-2/3 content-end'>
-            Add</button>
+            Add/Save</button>
 
           </div>
         </form>
@@ -333,10 +333,19 @@ const ActorForm = ({ onAddActor }) => {
                             alt={`Image ${movie.id + 1}`}
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                           />
-                        </div><div>
+                        </div>
+                        <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '5px',
+                        backgroundColor: 'transparent',
+                      }}>
                           <p>{movie.description}</p>
+                          <button  onClick={(e) => e.stopPropagation()} type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{background:'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)'}}>edit</button>
+
                           {/* Add more details or components here as needed */}
                         </div>
+
                       </div>
                     )}
                   </div>
