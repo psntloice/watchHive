@@ -31,21 +31,52 @@ const AuthorForm = ({ onAddAuthor }) => {
     setActiveMovieId(activeMovieId === id ? null : id);
   };
   const [activeMovieId, setActiveMovieId] = useState(null);
-  function addAuthor() {
-    fetch(`${backendBaseUrl}/api/authors`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${userToken}`,
-      },
-      body: JSON.stringify(movie),
-    })
-    
-    console.log("increment like count")
+  const backendBaseUrl = 'http://127.0.0.1:8000'
+  const addAuthor = async (event) => {
+    // Prevent default form submission if this function is used in a form
+    event.preventDefault();
+  
+    try {
+      // Make the GET request to the Laravel API
+      const response = await  fetch(`${backendBaseUrl}/api/authors`, {
+        method: 'GET', // Specify the HTTP method
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${userToken}`,
+        },
+      });
+  
+      // Check if the response is okay (status code 200-299)
+      if (!response.ok) {
+        throw new Error('Network response was not ok'); // Handle response errors
+      }
+  
+      // Parse the JSON data from the response
+      const data = await response.json();
+  
+      // Alert and log the fetched authors
+      alert(JSON.stringify(data)); // Display the authors data
+      console.log(data); // Log the authors data
+  
+      // Assuming you want to do something with the new author
+      // For example, if data contains an array of authors, you can access the first one like this:
+      if (data.length > 0) {
+        const newAuthor = data[0]; // Get the first author as an example
+        alert(newAuthor.name); // Alert the author's name
+      }
+  
+      console.log("Increment like count"); // Log this message
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error('Error fetching authors:', error);
+    }
   };
+  
   return (
     <div className='flex flex-row h-full bg-midnight text-tahiti p-2 gap-2'>
-      <form onSubmit={handleSubmit} className=' w-2/5 h-full gap-2 flex flex-col justify-items-center py-4'>
+      <form 
+      // onSubmit={handleSubmit} 
+      className=' w-2/5 h-full gap-2 flex flex-col justify-items-center py-4'>
             <Input
 type="text" 
 name="name" 
