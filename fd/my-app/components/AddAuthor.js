@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import {Input} from "@nextui-org/input";
 import styles from '../styles/edit.module.css';
+// import { useAuthorStore } from "../store/author";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
 
+// const authorStore = useAuthorStore();
+const queryClient = new QueryClient()
 const AuthorForm = ({ onAddAuthor }) => {
   const movies = [
     { id: 1, title: 'Movie 1', description: 'Details about Movie 1', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
@@ -32,9 +40,9 @@ const AuthorForm = ({ onAddAuthor }) => {
   };
   const [activeMovieId, setActiveMovieId] = useState(null);
   const backendBaseUrl = 'http://127.0.0.1:8000'
-  const addAuthor = async (event) => {
+  // const { isLoading, isError, data, error } = useQuery(['userData', 123], fetchUserData);
+  const addAuthor = async () => {
     // Prevent default form submission if this function is used in a form
-    event.preventDefault();
   
     try {
       // Make the GET request to the Laravel API
@@ -71,7 +79,14 @@ const AuthorForm = ({ onAddAuthor }) => {
       console.error('Error fetching authors:', error);
     }
   };
-  
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['authors'],
+    queryFn: addAuthor,
+  })
+
+  if (isLoading) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message 
   return (
     <div className='flex flex-row h-full bg-midnight text-tahiti p-2 gap-2'>
       <form 
@@ -99,7 +114,7 @@ required
          </form>
 
          <div className={styles.author} style={{ alignSelf:'center', overflowY: 'scroll', maxHeight: '89%', background: 'transparent', border: '2px', borderRadius: '15px' }}>
-         {movies.map((movie) => (
+         {/* {movies.map((movie) => (
               <div key={movie.id}  onClick={() => toggleMovie(movie.id)} className='flex justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight:'25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
                                  <h3>{movie.title}  </h3>
                                  <div
@@ -118,7 +133,28 @@ required
              </div>
 
               </div>
-            ))}
+            ))} */}
+  {/* {data.map((movie) => (
+              <div key={movie.id}  onClick={() => toggleMovie(movie.id)} className='flex justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight:'25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
+                                 <h3>{movie.name}  </h3>
+                                 <div
+                    style={{
+                      borderRadius: '5px',
+                      maxHeight: activeMovieId === movie.id ? '50%' : '0',
+                      overflow: 'hidden',
+                      transition: 'max-height 0.2s ease',
+                      padding: activeMovieId === movie.id ? '1px' : '0',
+                      background: 'linear-gradient(to top, #f9f9f9 5%, transparent 70%)',
+                    }}
+                  >
+<button type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{background:'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)'}}>edit</button>
+<button type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{background:'#4058b9 '}}>save</button>
+
+             </div>
+
+              </div>
+            ))} */}
+
         </div>
 </div>     
   );

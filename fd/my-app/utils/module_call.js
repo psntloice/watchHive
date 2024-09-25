@@ -1,40 +1,101 @@
-// const base_url = "http://localhost:8000/";
 const backendBaseUrl = 'http://localhost:8000';
 
-// const post_call = async (payload, path) => {
-//   const res = await fetch(`${base_url}/${path}`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(payload),
-//   });
+const post_call_module = async (payload, path) => {
+  try {
+  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok'); // Handle response errors
+  }
 
-//   const res_data = res.json();
+  const res_data = res.json();
 
-//   return res_data;
-// };
+  return res_data;
+} catch (error) {
+  // Handle any errors that occurred during the fetch
+  console.error('Error fetching authors:', error);
+}
+};
+
+export { post_call_module };
 
 
-// export { post_call };
 
-const addToFavorites = (movie) => {
-    fetch(`${backendBaseUrl}/api/genres`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${userToken}`,
-      },
-      body: JSON.stringify(movie),
-    })
-    .then(response => response.json())
-    // .then(data => setFavorites([...favorites, data.favorites]));
-    .then(data => {
-        console.log('Response data:', data);
-        // You can uncomment the following line if you want to update the favorites list
-        // setFavorites([...favorites, data.favorites]);
-      })
-      .catch(error => console.error('Error:', error));
-  };
-  
-  export { addToFavorites };
+const get_call_module = async (path) => {
+  try {
+  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res_data = res.json();
+
+  return res_data;
+} catch (error) {
+  // Handle any errors that occurred during the fetch
+  console.error('Error fetching authors:', error);
+}
+};
+
+export { get_call_module };
+
+
+
+
+const put_call_module = async (payload, path) => {
+  try {
+  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok'); // Handle response errors
+  }
+
+  const res_data = res.json();
+
+  return res_data;
+} catch (error) {
+  // Handle any errors that occurred during the fetch
+  console.error('Error fetching authors:', error);
+}
+};
+
+export { put_call_module };
+
+
+
+const delete_call_module = async (path) => {
+  try {
+  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok'); // Handle response errors
+  }
+
+  const res_data = res.json();
+
+  return res_data;
+} catch (error) {
+  // Handle any errors that occurred during the fetch
+  console.error('Error fetching authors:', error);
+}
+};
+
+export { delete_call_module };
+
