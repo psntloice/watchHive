@@ -5,3 +5,7 @@ Make description nullable
 add fillable to the db attributes in the models
 work on the controllers use where for update restrict from using find and also the correct responses in cases of success and failures
 
+Front end add space for description and input a default value that can be seen by the user .also add a section to add picture
+
+
+check that issue of refetching
