@@ -1,0 +1,78 @@
+
+There are a few issues in the code that can be improved:
+
+Naming issues with form state:
+
+The renewAuthor state object should be referenced as rename and redescription, not name and description.
+In rehandleChange, you're trying to destructure rename instead of name, but event objects should reference name directly.
+The button's form submission logic for updating authors is also missing proper integration.
+Inconsistent state handling:
+
+useState({ name: '', description: '' }) and useState({ rename: '', redescription: '' }) should be consistent with the fields you're managing.
+Refetching logic:
+
+You are calling queryClient.invalidateQueries after an author is added, but the query may not refetch immediately. Use refetch in appropriate places.
+Missing payload in updateAuthor:
+
+In the updateAuthor function, payload is referenced but never defined or passed.
+
+
+
+
+Problem 1:
+In the rehandleChange function:
+
+js
+Copy code
+const rehandleChange = (e) => {
+  const { rename, value } = e.target;
+  resetNewAuthor(prevState => ({ ...prevState, [rename]: value }));
+};
+The destructuring { rename, value } should actually be { name, value }. The property name in the e.target object is name, not rename. That's why the function doesn't work as expected. Here's the corrected version:
+
+Corrected Code:
+js
+Copy code
+const rehandleChange = (e) => {
+  const { name, value } = e.target;
+  resetNewAuthor(prevState => ({ ...prevState, [name]: value }));
+};
+
+
+When you're working with React Query, queryClient.invalidateQueries is used to mark a query as "stale," meaning it tells React Query that the data for a specific query might be outdated. However, this doesn't automatically refetch the data from the server right away. Instead, React Query will wait until a component requests the data again, and then it will refetch.
+
+The Problem:
+In your current logic, you're likely invalidating the query after adding an author using:
+
+js
+Copy code
+queryClient.invalidateQueries('authors');
+While this is the correct way to tell React Query that the list of authors may need to be updated, it doesn't force an immediate fetch. This can result in the data not updating on the screen right away.
+
+Solution - Use refetch for Immediate Fetching:
+To ensure that the authors' data is refetched and updated immediately after adding a new author, you can manually trigger the refetch by calling the refetch function of the query.
+
+For example:
+
+js
+Copy code
+const { data, refetch } = useQuery('authors', fetchAuthors);
+After adding the author, instead of relying only on invalidateQueries, you can call refetch() to immediately update the list:
+
+js
+Copy code
+const handleAddAuthor = async () => {
+  await addAuthor(newAuthorData);
+  queryClient.invalidateQueries('authors'); // Mark the query as stale
+  refetch(); // Trigger immediate refetch
+};
+Explanation:
+invalidateQueries('authors'): Marks the "authors" query as stale, meaning the next time the authors list is requested, React Query will fetch fresh data.
+refetch(): Forces the "authors" query to immediately refetch from the server and update the data in your component.
+By combining these, you ensure that the data updates in real-time after adding an author.
+
+
+
+
+
+there is something with placing buttons as to automatically submit

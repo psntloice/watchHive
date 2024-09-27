@@ -12,12 +12,16 @@ const queryClient = new QueryClient()
 const AuthorForm = () => {
 
   const [newAuthor, setNewAuthor] = useState({ name: '', description: '' });
+  const [renewAuthor, resetNewAuthor] = useState({ rename: '', redescription: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewAuthor(prevState => ({ ...prevState, [name]: value }));
   };
-
+  const rehandleChange = (e) => {
+    const { name, value } = e.target;
+    resetNewAuthor(prevState => ({ ...prevState, [name]: value }));
+  };
   const toggleMovie = (id) => {
     setActiveMovieId(activeMovieId === id ? null : id);
   };
@@ -41,7 +45,6 @@ const AuthorForm = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok'); // Handle response errors
       }
-      queryClient.invalidateQueries(['authors']);
       const data = await response.json();
       console.log(data); // Log the authors data
       return data;
@@ -84,6 +87,39 @@ const AuthorForm = () => {
       console.error('Error deleting authors:', error);
     }
   };
+  const updateAuthor = async (id, payload) => {
+    try {
+       // Transform the data format
+       const author = {
+        name: payload.rename,
+        description: payload.redescription
+      };
+
+      // Use the renamed author object as needed
+      console.log(author);
+
+      const response = await fetch(`${backendBaseUrl}/api/authors/${id}`, {
+        method: 'PUT', // Specify the HTTP method
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${userToken}`,
+        },
+        body: JSON.stringify(author),
+
+      });
+      console.log(payload);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok'); // Handle response errors
+      }
+      const data = await response.json();
+      console.log(data); // Log the authors data
+      return data;
+
+    } catch (error) {
+      console.error('Error deleting authors:', error);
+    }
+  };
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ['authors'],
     queryFn: getAuthor,
@@ -95,8 +131,18 @@ const AuthorForm = () => {
     e.preventDefault();
     await addAuthor(newAuthor);
     setNewAuthor({ name: '', description: '' });
-    queryClient.invalidateQueries({ queryKey: ['authors'] })
     refetch();
+    
+  };
+  const handleReSubmit = async (e, tid) => {
+    e.preventDefault();
+    if (tid) {
+      await updateAuthor(tid,renewAuthor);
+      resetNewAuthor({ rename: '', redescription: '' });
+    refetch();
+    setActiveDivId(activeDivId === tid ? null : null);        }
+
+    
   };
 
 
@@ -149,14 +195,14 @@ const AuthorForm = () => {
                 overflow: 'hidden',
                 transition: 'max-width 0.2s ease',
               }}>
-              <button onClick={() => toggleMovie(movie.id)}  type="button" class="flex flex-reverse flex-end text-white font-small rounded-lg text-xs font-thin w-min h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>
+              <button onClick={() => toggleMovie(movie.id)}  type="button" className="flex flex-reverse flex-end text-white font-small rounded-lg text-xs font-thin w-min h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                   <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
                   <path d="M4.75 3.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h6.5c.69 0 1.25-.56 1.25-1.25V9A.75.75 0 0 1 14 9v2.25A2.75 2.75 0 0 1 11.25 14h-6.5A2.75 2.75 0 0 1 2 11.25v-6.5A2.75 2.75 0 0 1 4.75 2H7a.75.75 0 0 1 0 1.5H4.75Z" />
                 </svg>
               </button>
 
-              <button onClick={() => removeAuthor(movie.id)} type="button" class="text-white font-small rounded-lg text-xs font-thin w-min h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>
+              <button onClick={() => removeAuthor(movie.id)} type="button" className="text-white font-small rounded-lg text-xs font-thin w-min h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                   <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
                 </svg>
@@ -173,30 +219,35 @@ const AuthorForm = () => {
                 background: 'linear-gradient(to top, #f9f9f9 5%, transparent 70%)',
               }}
             >
+              <form onSubmit={(e) => handleReSubmit(e, movie.id)}>
+              <label className='text-xs tracking-tighter ' style={{
+                color: 'darkgray'
+              }}>name</label>
               <Input
                 type="text"
-                name="name"
-                value={newAuthor.name}
-                onChange={handleChange}
-                required
+                name="rename"
+                value={renewAuthor.rename}
+                onChange={rehandleChange}
+                isRequired
                 color="primary"
-                placeholder="Enter name"
-                defaultValue=" "
-                className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center"
+                placeholder={movie.name}
+                                className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center shadow-xl "
               />
+               <label className='text-xs tracking-tighter' style={{
+                color: 'darkgray'
+              }}>description</label>
               <Input
                 type="text"
-                name="description"
-                value={newAuthor.description}
-                onChange={handleChange}
-                required
+                name="redescription"
+                value={renewAuthor.redescription}
+                onChange={rehandleChange}
+                isRequired
                 color="primary"
-                placeholder="Enter description"
-                defaultValue=" "
-                className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center"
+                placeholder={movie.description}
+                className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center shadow-xl"
               />
-              <button type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{ background: '#4058b9 ' }}>save</button>
-
+              <button type="submit" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{ background: '#4058b9 ' }}>save</button>
+              </form>
             </div>
 
           </div>

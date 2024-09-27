@@ -9,3 +9,12 @@ Front end add space for description and input a default value that can be seen b
 
 
 check that issue of refetching
+
+handle putting the specific PATCH
+
+do padding on the movies
+
+how to handle that issue on update author since its picking idiff keys
+
+
+handle errors of empty cases where either description or somethings is empty
