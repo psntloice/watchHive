@@ -42,31 +42,15 @@ const Favourites = ({ onAddMovie, genres, authors }) => {
     });
   };
   const images = [
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     // more images
   ];
   const [switchStates, setSwitchStates] = useState({
@@ -170,7 +154,7 @@ Author      </label>
      <Image
     width={300}
     alt="NextUI hero Image"
-    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
     style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
   />
     </div>

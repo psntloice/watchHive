@@ -105,7 +105,15 @@ const Watchlist = () => {
             {/* <p className="text-default-500 text-small">{selected}</p>
         choose movie */}
             <div style={{ flex: '1' }}>
-              <Table aria-label="Example static collection table">
+              <Table  style={{
+              padding: '10px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              width: '100%',
+              textAlign: 'left',
+              backgroundColor: '#0e2f53e5 ',
+              border: '1px solid #ddd',
+            }} aria-label="Example static collection table">
                 <TableHeader>
                   <TableColumn>NAME</TableColumn>
                   <TableColumn>ROLE</TableColumn>
@@ -145,12 +153,12 @@ const Watchlist = () => {
                   <Image
                     width={300}
                     alt="NextUI hero Image"
-                    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+                    src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                     style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
                   />
                 </CardBody>
               </Card>
-              <Card style={{ height: '100%', flex: '1', justifyContent: 'center', color: 'white', background: 'linear-gradient(to top, #4755ed 10%, #babccf 70%)' }}>
+              <Card style={{ height: '100%', flex: '1', justifyContent: 'center', color: 'white', background: 'transparent' }}>
                 <CardBody>
                   <p>Make beautiful websites regardless of your design experience.</p>
                 </CardBody>
@@ -162,11 +170,13 @@ const Watchlist = () => {
                   padding: '8px 16px',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  backgroundColor: '#0070f3',
+                  background: 'linear-gradient(to top,  transparent 5%, #0e2f53e5 82%)',
                   color: '#fff',
-                  border: 'none',
+                  border: '1px solid #ddd',
                   position: 'sticky',
-                  justifyContent: 'flex-end'
+                  width: '75%',
+                  alignSelf: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 Add to watchlist

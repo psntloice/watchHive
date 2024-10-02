@@ -170,15 +170,15 @@ const Home = () => {
     centerMode: false, // Do not center the active slide
   };
   const images = [
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-     "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     // more images
   ];
   return (
@@ -192,6 +192,7 @@ const Home = () => {
   <div style={{
     flex: '2',
     position: 'relative', // Relative to position the slider correctly
+    background: 'url("https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
     backgroundRepeat: 'no-repeat',
     height: '95vh',
     color: '#fff',

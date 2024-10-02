@@ -40,31 +40,15 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
     });
   };
   const images = [
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg",
-    "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     // more images
   ];
   
