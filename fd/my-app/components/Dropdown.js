@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const moviesByMonth = {
-  January: ['Movie 1', 'Movie 2'],
-  February: ['Movie 3', 'Movie 4'],
-  June: ['Movie 5', 'Movie 6'],
+  January: ['Movie 1 when you click you can also view movies details on a popup', 'Movie 2'],
+  February: ['Movie 3 i dont understand the diff btn this and the other constant in watchlist initial movies by month', 'Movie 4'],
+  June: ['Movie 5 Movie 3  consider that a movie can have more than one genres', 'Movie 6'],
   // Add more months and movies
 };
 

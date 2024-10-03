@@ -13,7 +13,7 @@ const Library = () => {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '6px' }}>
         {/* Input Component */}
         <div style={{ flex: '0 1 8%' }}>
-          <Input type="email" label="Email" style={{ width: '100%' }} />
+          <Input type="email" label="by name/author/genre/actor" style={{ width: '100%' }} onClear={() => console.log("input cleared")}/>
         </div>
       
         {/* MovieForm Component */}

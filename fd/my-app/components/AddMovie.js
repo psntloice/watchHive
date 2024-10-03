@@ -54,32 +54,6 @@ const ActorForm = ({ onAddActor }) => {
   };
 
 
-
-  const rows = [
-    {
-      key: "1",
-      name: "Tony Reichert",
-      role: "CEO",
-    },
-    {
-      key: "2",
-      name: "Tony Reichert",
-      role: "CEO",
-    },
-  ];
-
-  const columns = [
-    {
-      key: "name",
-      label: "NAME",
-    },
-    {
-      key: "role",
-      label: "ROLE",
-    },
-
-  ];
-
   const animals = [
     { key: "cat", label: "Cat" },
     { key: "dog", label: "Dog" },
