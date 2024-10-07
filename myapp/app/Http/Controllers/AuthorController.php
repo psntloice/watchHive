@@ -26,6 +26,7 @@ class AuthorController extends Controller
         ]);
         Log::info('This is an informational message.');
         return Author::create($request->all());
+        echo(Author::create($request->all()));
     }
 
     public function update(Request $request, $id)

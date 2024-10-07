@@ -109,12 +109,12 @@ const AuthorForm = () => {
       });
       console.log(payload);
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok'); // Handle response errors
-      }
-      const data = await response.json();
-      console.log(data); // Log the authors data
-      return data;
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok'); // Handle response errors
+      // }
+      // const data = await response.json();
+      // console.log(data); // Log the authors data
+      // return data;
 
     } catch (error) {
       console.error('Error deleting authors:', error);
