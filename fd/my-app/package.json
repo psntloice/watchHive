@@ -18,6 +18,7 @@
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/table": "^2.0.39",
     "@nextui-org/theme": "^2.2.9",
+    "@reduxjs/toolkit": "^2.2.8",
     "@rpldy/upload-button": "^1.8.2",
     "@rpldy/upload-drop-zone": "^1.8.2",
     "@rpldy/upload-preview": "^1.8.2",
@@ -30,8 +31,11 @@
     "react-dom": "^18",
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
+    "react-redux": "^9.1.2",
     "react-responsive-carousel": "^3.2.23",
     "react-slick": "^0.30.2",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
