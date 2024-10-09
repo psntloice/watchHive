@@ -1,5 +1,5 @@
 const backendBaseUrl = 'http://localhost:8000';
-
+console.log("yoooh") 
 const post_call_module = async (payload, path) => {
   try {
   const res = await fetch(`${backendBaseUrl}/api/${path}`, {
@@ -34,10 +34,11 @@ const get_call_module = async (path) => {
       "Content-Type": "application/json",
     },
   });
+  console.log("yoooh inna") 
 
   const res_data = res.json();
-
-  return res_data;
+console.log(res_data)
+  return res;
 } catch (error) {
   // Handle any errors that occurred during the fetch
   console.error('Error fetching authors:', error);
@@ -49,9 +50,9 @@ export { get_call_module };
 
 
 
-const put_call_module = async (payload, path) => {
+const put_call_module = async (payload, path, id) => {
   try {
-  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
+  const res = await fetch(`${backendBaseUrl}/api/${path}/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -75,14 +76,13 @@ export { put_call_module };
 
 
 
-const delete_call_module = async (path) => {
+const delete_call_module = async (path,id) => {
   try {
-  const res = await fetch(`${backendBaseUrl}/api/${path}`, {
-    method: "POST",
+  const res = await fetch(`${backendBaseUrl}/api/${path}/${id}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
   });
   if (!response.ok) {
     throw new Error('Network response was not ok'); // Handle response errors

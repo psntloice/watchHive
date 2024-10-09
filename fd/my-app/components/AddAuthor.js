@@ -6,10 +6,32 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query';
+import { fetchMovie, fetchAuthor } from '@/redux/movieSlicer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { get_call_module } from '../utils/module_call';
 
 const queryClient = new QueryClient()
 
 const AuthorForm = () => {
+
+
+
+  const dispatch = useDispatch()
+  const {  isLoading: isReduxLoading, data: reduxData, error: reduxError } = useSelector((state) => state.movie);
+  const sdata = useSelector(state => state.movie)
+  useEffect(() => {
+    console.log("Dispatching fetchMovie...");
+    dispatch(fetchMovie());
+}, [dispatch]);
+  console.log(reduxData);
+  // const sodata = useSelector(state => state)
+  // useEffect(() => {
+  //   dispatch(fetchAuthor())
+  // }, [])
+  // console.log(sodata)
+
+
 
   const [newAuthor, setNewAuthor] = useState({ name: '', description: '' });
   const [renewAuthor, resetNewAuthor] = useState({ rename: '', redescription: '' });
@@ -124,8 +146,8 @@ const AuthorForm = () => {
     queryKey: ['authors'],
     queryFn: getAuthor,
   })
-  if (isLoading) return 'Loading...'
-  if (error) return 'An error has occurred: ' + error.message
+  // if (isLoading) return 'Loading...'
+  // if (error) return 'An error has occurred: ' + error.message
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,7 +167,8 @@ const AuthorForm = () => {
     
   };
 
-
+  if (isReduxLoading ) return 'Loading...';
+  if (reduxError ) return 'An error has occurred: ' + (reduxError?.message );
   return (
     <div className='flex flex-row w-full h-full bg-midnight text-tahiti p-2 gap-2'>
       <form
@@ -184,7 +207,7 @@ const AuthorForm = () => {
       </form>
 
       <div className={styles.author} style={{ alignSelf: 'center', overflowY: 'scroll', maxHeight: '89%', background: 'transparent', border: '2px', borderRadius: '15px'}}>
-        {data.map((movie) => (
+        {/* {data.map((movie) => (
           <div key={movie.id}   onMouseEnter={() => HoverDiv(movie.id)}
           
             className='flex flex-col justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight: '25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
@@ -251,7 +274,7 @@ const AuthorForm = () => {
             </div>
 
           </div>
-        ))}
+        ))} */}
 
       </div>
     </div>
