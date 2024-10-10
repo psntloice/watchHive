@@ -34,11 +34,9 @@ const get_call_module = async (path) => {
       "Content-Type": "application/json",
     },
   });
-  console.log("yoooh inna") 
-
-  const res_data = res.json();
+  const res_data =await  res.json();
 console.log(res_data)
-  return res;
+  return res_data;
 } catch (error) {
   // Handle any errors that occurred during the fetch
   console.error('Error fetching authors:', error);

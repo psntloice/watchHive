@@ -3,13 +3,9 @@ import { get_call_module } from '../utils/module_call'
 
 export const fetchMovie = createAsyncThunk("fetchMovie", async () =>
 {
-    console.log("yoooh inna slicer") 
-
-    const data = await get_call_module("authors")
+    const data = await get_call_module("authors");
     console.log(data);
-    console.log("yoooh inna slicer after data") 
-
-    return data.json()
+    return data
 })
 // export const fetchAuthor = createAsyncThunk("fetchActor", async () =>
 //     {

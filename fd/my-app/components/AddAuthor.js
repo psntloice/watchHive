@@ -6,33 +6,12 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query';
-import { fetchMovie, fetchAuthor } from '@/redux/movieSlicer';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { get_call_module } from '../utils/module_call';
 
-const queryClient = new QueryClient()
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
+
+const queryClient = new QueryClient();
 
 const AuthorForm = () => {
-
-
-
-  const dispatch = useDispatch()
-  const {  isLoading: isReduxLoading, data: reduxData, error: reduxError } = useSelector((state) => state.movie);
-  const sdata = useSelector(state => state.movie)
-  useEffect(() => {
-    console.log("Dispatching fetchMovie...");
-    dispatch(fetchMovie());
-}, [dispatch]);
-  console.log(reduxData);
-  // const sodata = useSelector(state => state)
-  // useEffect(() => {
-  //   dispatch(fetchAuthor())
-  // }, [])
-  // console.log(sodata)
-
-
-
   const [newAuthor, setNewAuthor] = useState({ name: '', description: '' });
   const [renewAuthor, resetNewAuthor] = useState({ rename: '', redescription: '' });
 
@@ -52,22 +31,9 @@ const AuthorForm = () => {
   };
   const [activeMovieId, setActiveMovieId] = useState(null);
   const [activeDivId, setActiveDivId] = useState(null);
-  const backendBaseUrl = 'http://127.0.0.1:8000';
   const addAuthor = async (payload) => {
     try {
-      const response = await fetch(`${backendBaseUrl}/api/authors`, {
-        method: 'POST', // Specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${userToken}`,
-        },
-        body: JSON.stringify(payload),
-
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok'); // Handle response errors
-      }
-      const data = await response.json();
+      const data = await post_call_module(payload,"authors");
       console.log(data); // Log the authors data
       return data;
     } catch (error) {
@@ -76,17 +42,7 @@ const AuthorForm = () => {
   };
   const getAuthor = async () => {
     try {
-      const response = await fetch(`${backendBaseUrl}/api/authors`, {
-        method: 'GET', // Specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${userToken}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok'); // Handle response errors
-      }
-      const data = await response.json();
+      const data = await get_call_module("authors")
       console.log(data); // Log the authors data
       return data;
     } catch (error) {
@@ -95,16 +51,10 @@ const AuthorForm = () => {
   };
   const removeAuthor = async (id) => {
     try {
-      const response = await fetch(`${backendBaseUrl}/api/authors/${id}`, {
-        method: 'DELETE', // Specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${userToken}`,
-        },
-      });
+      const data = await delete_call_module("authors",id);
       refetch();
-
-
+      console.log(data); // Log the authors data
+      return data;
     } catch (error) {
       console.error('Error deleting authors:', error);
     }
@@ -119,25 +69,7 @@ const AuthorForm = () => {
 
       // Use the renamed author object as needed
       console.log(author);
-
-      const response = await fetch(`${backendBaseUrl}/api/authors/${id}`, {
-        method: 'PUT', // Specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${userToken}`,
-        },
-        body: JSON.stringify(author),
-
-      });
-      console.log(payload);
-
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok'); // Handle response errors
-      // }
-      // const data = await response.json();
-      // console.log(data); // Log the authors data
-      // return data;
-
+      const data = await put_call_module(author,"authors",id);
     } catch (error) {
       console.error('Error deleting authors:', error);
     }
@@ -146,8 +78,7 @@ const AuthorForm = () => {
     queryKey: ['authors'],
     queryFn: getAuthor,
   })
-  // if (isLoading) return 'Loading...'
-  // if (error) return 'An error has occurred: ' + error.message
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -166,9 +97,9 @@ const AuthorForm = () => {
 
     
   };
+  if (isLoading) return 'Loading...'
+  if (error) return 'An error has occurred: ' + error.message
 
-  if (isReduxLoading ) return 'Loading...';
-  if (reduxError ) return 'An error has occurred: ' + (reduxError?.message );
   return (
     <div className='flex flex-row w-full h-full bg-midnight text-tahiti p-2 gap-2'>
       <form
@@ -207,7 +138,7 @@ const AuthorForm = () => {
       </form>
 
       <div className={styles.author} style={{ alignSelf: 'center', overflowY: 'scroll', maxHeight: '89%', background: 'transparent', border: '2px', borderRadius: '15px'}}>
-        {/* {data.map((movie) => (
+        {data.map((movie) => (
           <div key={movie.id}   onMouseEnter={() => HoverDiv(movie.id)}
           
             className='flex flex-col justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight: '25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
@@ -274,7 +205,7 @@ const AuthorForm = () => {
             </div>
 
           </div>
-        ))} */}
+        ))}
 
       </div>
     </div>

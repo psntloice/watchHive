@@ -1,0 +1,23 @@
+import { fetchMovie, fetchAuthor } from '@/redux/movieSlicer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+
+
+
+//   const dispatch = useDispatch()
+//   const {  isLoading: isReduxLoading, data: reduxData, error: reduxError } = useSelector((state) => state.movie);
+//   const sdata = useSelector(state => state.movie)
+//   useEffect(() => {
+//     console.log("Dispatching fetchMovie...");
+//     dispatch(fetchMovie());
+// }, [dispatch]);
+//   console.log(reduxData);
+  // const sodata = useSelector(state => state)
+  // useEffect(() => {
+  //   dispatch(fetchAuthor())
+  // }, [])
+  // console.log(sodata)
+
+  // if (isReduxLoading ) return 'Loading...';
+  // if (reduxError ) return 'An error has occurred: ' + (reduxError?.message );

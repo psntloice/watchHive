@@ -18,57 +18,32 @@ class ActorController extends Controller
 
     public function show($id)
     {
-        $actor = Actor::where('deductionID', $id)->first();
-        if (!$actor) {
-            return response()->json(['message' => 'not found'], 404);
-        }
+        return Actor::findOrFail($id);
 
-        return $actor;
     }
 
     public function store(Request $request)
     {
 
-        try {
-            // Validate incoming request
-            $validator = Validator::make($request->all(), [
-                'payPeriodID' => 'required|string|exists:pay_periods,payPeriodID',
-                'employeeID' => 'required|string',
-                'deductionType' => 'required|string',
-                'amount' => 'required|numeric',
-            ]);
-
-            // Check if validation fails
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()], 400);
-            } else {
-                return Actor::create($validator->validated());
-            }
-        } catch (ValidationException $e) {
-            // Log validation errors
-            Log::error('Validation Error', ['errors' => $e->errors()]);
-            return response()->json(['error' => 'Validation failed', 'errors' => $e->errors()], 422);
-        }
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+        Log::info('This is an informational message.');
+        return Actor::create($request->all());
+        echo(Actor::create($request->all()));
     }
 
     public function update(Request $request, $id)
     {
-        $actor = Actor::where('deductionID', $id)->first();
-        if (!$actor) {
-            return response()->json(['message' => 'not found'], 404);
-        }
+        $actor = Actor::findOrFail($id);
         $actor->update($request->all());
         return $actor;
     }
 
     public function destroy($id)
     {
-        $actor = Actor::where('deductionID', $id)->first();
-        if (!$actor) {
-            return response()->json(['message' => 'not found'], 404);
-        }
-        $actor->delete();
-
+        Actor::destroy($id);
         return response()->json(['message' => 'deleted successfully']);
     }
 }
