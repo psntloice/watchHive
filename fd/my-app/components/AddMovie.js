@@ -24,16 +24,28 @@ import { get_call_module, post_call_module, put_call_module, delete_call_module 
 
 const queryClient = new QueryClient();
 const ActorForm = () => {
-  const [newAuthor, setNewAuthor] = useState({ name: '', description: '' });
-  const [renewAuthor, resetNewAuthor] = useState({ rename: '', redescription: '' });
+  const [newmovieData, setMovieData] = useState({ 
+    title: '',
+    type: '' ,
+    genre_id: '',
+    author_id: '',
+    actor_id: '',
+    sequel_id: '',
+    has_sequel: '',
+    picture_url: '',
+    is_upcoming: '',
+    first_release_date: '',
+    next_release_date: '',
+  });
+  const [renewMovie, resetNewMovie] = useState({ rename: '', redescription: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewAuthor(prevState => ({ ...prevState, [name]: value }));
+    setNewMovie(prevState => ({ ...prevState, [name]: value }));
   };
   const rehandleChange = (e) => {
     const { name, value } = e.target;
-    resetNewAuthor(prevState => ({ ...prevState, [name]: value }));
+    resetNewMovie(prevState => ({ ...prevState, [name]: value }));
   };
   const toggleMovie = (id) => {
     setActiveMovieId(activeMovieId === id ? null : id);
@@ -43,15 +55,7 @@ const ActorForm = () => {
   };
   const [activeMovieId, setActiveMovieId] = useState(null);
   const [activeDivId, setActiveDivId] = useState(null);
-  const movies = [
-    { id: 1, title: 'Movie 1', description: 'Details about Movie 1', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 2, title: 'Movie 2', description: 'Details about Movie 2', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 3, title: 'Movie 3', description: 'Details about Movie 3', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 4, title: 'Movie 4', description: 'Details about Movie 4', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 5, title: 'Movie 5', description: 'Details about Movie 5', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 6, title: 'Movie 6', description: 'Details about Movie 6', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-    { id: 7, title: 'Movie 7', description: 'Details about Movie 7', image: "https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg" },
-  ];
+ 
 
 
   const [newActor, setNewActor] = useState({ name: '' });
@@ -95,7 +99,7 @@ const ActorForm = () => {
   };
 
  
-  const addAuthor = async (payload) => {
+  const addMovie = async (payload) => {
     try {
       const data = await post_call_module(payload,"authors");
       console.log(data); // Log the authors data
@@ -113,7 +117,7 @@ const ActorForm = () => {
       console.error('Error fetching authors:', error);
     }
   };
-  const removeAuthor = async (id) => {
+  const removeMovie = async (id) => {
     try {
       const data = await delete_call_module("authors",id);
       refetch();
@@ -123,7 +127,7 @@ const ActorForm = () => {
       console.error('Error deleting authors:', error);
     }
   };
-  const updateAuthor = async (id, payload) => {
+  const updateMovie = async (id, payload) => {
     try {
        // Transform the data format
        const author = {
@@ -165,7 +169,7 @@ const ActorForm = () => {
       console.error('Error fetching authors:', error);
     }
   };
-  const {isLoading: isMovieLoading, data: movieData, error: movieError} = useQuery({
+  const {isLoading: isMovieLoading, data: movieData, error: movieError, refetch} = useQuery({
     queryKey: ['movies'],
     queryFn: getMovie,
   })
@@ -185,9 +189,9 @@ const ActorForm = () => {
     e.preventDefault();
 
     const booleanValue = selectedValue === "true";
-
-    await addAuthor(newAuthor);
-    setNewAuthor({ name: '', description: '' });
+console.log(newmovieData);
+    // await addMovie(newMovie);
+    // setNewMovie({ name: '', description: '' });
     refetch();
     
   };
@@ -216,7 +220,9 @@ const ActorForm = () => {
 
               <div className="flex flex-col gap-2 ">
                 <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4 justify-evenly">
-                  <Input type="text" name="name" value={newActor.name} onChange={handleChange} required color="primary" label="Title" placeholder="Enter movie/series name" defaultValue=" " className="max-w-[220px]" style={{ background: '#E6F1FE' }}
+                  <Input type="text" name="name" value={newmovieData.title} 
+                  onChange={(e) => setMovieData({ ...newmovieData, title: e.target.value })}
+                  required color="primary" label="Title" placeholder="Enter movie/series name" defaultValue=" " className="max-w-[220px]" style={{ background: '#E6F1FE' }}
                   />
 
                   <Select
@@ -224,8 +230,11 @@ const ActorForm = () => {
                     variant='bordered'
                     style={{ color: '#155e75', background: '#E6F1FE', borderRadius: '15px' }}
                     className="max-w-52 "
-                    value={selectedValue} onChange={handleSelectChange}
-                  >
+                    
+                    onChange={(e) => {
+                      console.log("Selected Value:", e.target.value);  // Check the value being passed
+                      setMovieData({ ...newmovieData, type: e.target.value });
+                    }}                  >
                        <SelectItem color="black"
                         style={{ color: '#155e75' }} value="movie">Movie</SelectItem>
                        <SelectItem color="black"
@@ -236,7 +245,10 @@ const ActorForm = () => {
 
               <div className="flex flex-col gap-2 ">
                 <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4 justify-evenly">
-                  <DatePicker label="First Release Date" className="max-w-[284px] " color='primary' isRequired />
+                  <DatePicker label="First Release Date" className="max-w-[284px] " color='primary' isRequired 
+                  //  value={newmovieData.first_release_date}
+                  onChange={(e) => setMovieData({ ...newmovieData, first_release_date: e.target.value })} 
+                  />
                   <DatePicker label="Next Release Date" className="max-w-[284px]" color='primary' />
 
 
@@ -254,12 +266,14 @@ const ActorForm = () => {
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
                     variant='bordered'
                     className="max-w-52 text-blue-500"
+                    onChange={(e) => setMovieData({ ...newmovieData, author_id: e.target.value })}
                   >
                     {authorData.map((author) => (
                       <SelectItem
                         color="black"
                         style={{ color: '#155e75' }}
-                        key={author.id}>
+                        key={author.id}
+                        value={author.id}>
                         {author.name}
                       </SelectItem>
                     ))}
@@ -269,12 +283,14 @@ const ActorForm = () => {
                     className="max-w-52"
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
+                    onChange={(e) => setMovieData({ ...newmovieData, genre_id: e.target.value })}
                   >
                     {genreData.map((genre) => (
                       <SelectItem
                         color="black"
                         style={{ color: '#155e75' }}
-                        key={genre.id}>
+                        key={genre.id}
+                        value={genre.id}>
                         {genre.name}
                       </SelectItem>
                     ))}
@@ -284,13 +300,15 @@ const ActorForm = () => {
                     className="max-w-52"
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
+                    onChange={(e) => setMovieData({ ...newmovieData, actor_id: e.target.value })}
                   >
                     {actorData.map((actor) => (
                       <SelectItem
                         color="black"
                         style={{ color: '#155e75' }}
-                        key={actor.key}>
-                        {actor.label}
+                        key={actor.id}
+                        value={actor.id}>
+                        {actor.name}
                       </SelectItem>
                     ))}
                   </Select>
@@ -303,8 +321,9 @@ const ActorForm = () => {
                     placeholder="Has Sequel?"
                     className="max-w-28"
                     variant='bordered'
-                    value={selectedValue} onChange={handleSelectChange}
+                    value={selectedValue} 
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
+                    onChange={(e) => setMovieData({ ...newmovieData, has_sequel: e.target.value })}
                   >
                       <SelectItem  color="black"
                         style={{ color: '#155e75' }} value="true">Yes</SelectItem>
@@ -318,23 +337,25 @@ const ActorForm = () => {
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
                     className="max-w-52"
+                    onChange={(e) => setMovieData({ ...newmovieData, sequel_id: e.target.value })}
                   >
-                    {/* {movieData.map((movie) => (
+                    {movieData.map((movie) => (
                       <SelectItem
                         color="black"
                         style={{ color: '#155e75' }}
                         key={movie.id}>
-                        {movie.name}
+                        {movie.title}
                       </SelectItem>
-                    ))} */}
+                    ))}
                   </Select>
 
                   <Select
                     placeholder="Is Upcoming?"
                     className="max-w-40"
                     variant='bordered'
-                    value={selectedValue} onChange={handleSelectChange}
+                    value={selectedValue}
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
+                    onChange={(e) => setMovieData({ ...newmovieData, is_upcoming: e.target.value })}
                   >
                       <SelectItem  color="black"
                         style={{ color: '#155e75' }} value="true">Yes</SelectItem>
@@ -350,7 +371,7 @@ const ActorForm = () => {
 
             </div>
             <div className="flex flex-col gap-4 w-2/5 h-full bg-sky-500 border-y-4 border border-blue-700 rounded-3xl">
-              <Uploady destination={{ url: "https://my-server.com/upload" }}>
+              <Uploady destination={{ url: "https://localhost/upload" }}>
                 <UploadDropZone
                   onDragOverClassName="drag-over"
                   grouped
@@ -376,7 +397,7 @@ const ActorForm = () => {
 
         <div style={{ position: 'relative', height: '100%', justifyContent: 'center', color: 'black' }} className="w-1/4">
           <div style={{ overflowY: 'auto', maxHeight: '80vh', padding: '10px', background: 'linear-gradient(to top, #4058b9  5%, #babccf 30%)', height: '43vh', border: '0px', borderRadius: '15px' }}>
-            {movies.map((movie) => (
+            {movieData.map((movie) => (
               <div key={movie.id} style={{ marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: 'transparent' }}>
                 <div
                   onClick={() => toggleMovie(movie.id)}
@@ -409,7 +430,9 @@ const ActorForm = () => {
                           <Image
                             width={150}
                             height={150}
-                            src={movie.image}
+                            // src={movie.picture_url}
+                            src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+
                             alt={`Image ${movie.id + 1}`}
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                           />
@@ -420,7 +443,7 @@ const ActorForm = () => {
                           gap: '5px',
                           backgroundColor: 'transparent',
                         }}>
-                          <p>{movie.description}</p>
+                          <p>{movie.first_release_date}</p>
                           <button onClick={(e) => e.stopPropagation()} type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>edit</button>
 
                           {/* Add more details or components here as needed */}
