@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Show;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Exception;
 
 class ShowController extends Controller
 {
     public function index()
     {
-        return Show::all();
+        
+        // $movies = Show::all();
+
+        // // Loop through each movie to append the image URL
+        // foreach ($movies as $movie) {
+        //     $movie->picture_url = asset('storage/app/public/images' . $movie->image); // Assuming `image` stores the file name
+        //     // $movie->picture_url = asset('storage/app/public/images/8CuSte4K3VFBgP3ZN3Ufxc0gccjbjWbVjbAkIbWi.jpg');
+        // }
+        
+        // return response()->json($movies);
+    return Show::all();
     }
 
     public function show($id)
@@ -19,38 +30,77 @@ class ShowController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|string',
-            'genre_id' => 'required|exists:genres,id',
-            'actor_id' => 'required|exists:actors,id',
-            'author_id' => 'required|exists:authors,id',
-            'first_release_date' => 'nullable|date',
-            'next_release_date' => 'nullable|date',
-            'sequel_id' => 'nullable|exists:shows,id',
-            'has_sequel' => 'boolean',
-            'is_upcoming' => 'boolean',
-        ]);
-
-          // Store the uploaded image locally
-          $filePath = $request->file('image')->store('images', 'public'); // Save in storage/app/public/images
-
-          // Create a new movie instance and set its properties
-          $movie = new Show();
-          $movie->title = $request->title;
-          $movie->type = $request->type;
-          $movie->genre_id = $request->genre_id;
-          $movie->actor_id = $request->actor_id;
-          $movie->author_id = $request->author_id;
-          $movie->first_release_date = $request->first_release_date;
-          $movie->next_release_date = $request->next_release_date;
-          $movie->sequel_id = $request->sequel_id;
-          $movie->has_sequel = $request->has_sequel;
-          $movie->is_upcoming = $request->is_upcoming;
-          $movie->image_url = $filePath; // Store the local file path
-          $movie->save(); // Save the movie to the database
-  
-        // return Show::create($request->all());
+           
+        try {
+            // Step 1: Validate the request
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'type' => 'required|string',
+                'genre_id' => 'required|exists:genres,id',
+                'actor_id' => 'required|exists:actors,id',
+                'author_id' => 'required|exists:authors,id',
+                'first_release_date' => 'nullable|date',
+                'next_release_date' => 'nullable|date',
+                'sequel_id' => 'nullable|exists:shows,id',
+                // 'has_sequel' => 'boolean',
+                // 'is_upcoming' => 'boolean',
+                'picture_url' => 'image|max:2048'
+            ]);
+    
+            // Step 2: Handle the image upload
+            if ($request->hasFile('picture_url')) {
+                $image = $request->file('picture_url');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('public/images', $imageName);
+                
+                if ($imagePath) {
+                    // Image uploaded successfully
+                    $pictureUrl = 'images/' . $imageName;
+                    error_log("Image uploaded successfully: " . $pictureUrl);
+                    
+                    // Add the image path to the validated data
+                    $validatedData['picture_url'] = $pictureUrl;
+                } else {
+                    // Failed to upload the image
+                    error_log("Failed to upload the image.");
+                    return response()->json(['error' => 'Image upload failed.'], 500);
+                }
+            } else {
+                // No image uploaded
+                error_log("No image uploaded in the request.");
+                return response()->json(['error' => 'No image uploaded.'], 400);
+            }
+    
+            // Step 3: Create a new Show record using the validated data
+            $show = Show::create($validatedData);
+    
+            if ($show) {
+                // Successfully created the Show
+                error_log("Successfully created the Show: " . json_encode($show));
+                return response()->json($show, 201);
+            } else {
+                // Failed to create the Show
+                error_log("Failed to create the Show.");
+                return response()->json(['error' => 'Failed to create the Show.'], 500);
+            }
+        } catch (\Exception $e) {
+            // Catch any unexpected exceptions
+            error_log("Exception occurred: " . $e->getMessage());
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+      
+        // $image = $request->file('picture_url');
+        // $imageName = time() . '.' . $image->getClientOriginalExtension();
+        // $image->storeAs('public/images', $imageName);
+        // // // $request->file('picture_url')->store('images', 'public'); 
+   
+        //  return Show::create(['title' => $request->title,
+        //     'type' => $request->type,
+        //     'genre_id' => $request->genre_id,
+        //     'actor_id' => $request->actor_id,
+        //     'author_id' => $request->author_id,
+           
+        //     'picture_url' =>'images/' . $imageName]);
     }
 
     public function update(Request $request, $id)
@@ -66,3 +116,6 @@ class ShowController extends Controller
         return response()->noContent();
     }
 }
+// php artisan storage:link
+
+//    INFO  The [E:\watchHive\myapp\public\storage] link has been connected to [E:\watchHive\myapp\storage\app/public].  

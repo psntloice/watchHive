@@ -24,6 +24,8 @@ import { get_call_module, post_call_module, put_call_module, delete_call_module 
 
 const queryClient = new QueryClient();
 const ActorForm = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const [imageUrl, setImageUrl] = useState(null);
   const [newmovieData, setMovieData] = useState({ 
     title: '',
     type: '' ,
@@ -75,18 +77,7 @@ const ActorForm = () => {
     // arrows: true, // Show next/prev arrows
     centerMode: false, // Do not center the active slide
   };
-  const images = [
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    // more images
-  ];
+
 
   const Uploady = dynamic(() => import('@rpldy/uploady'), { ssr: false });
   const UploadDropZone = dynamic(() => import('@rpldy/upload-drop-zone'), { ssr: false });
@@ -101,11 +92,11 @@ const ActorForm = () => {
  
   const addMovie = async (payload) => {
     try {
-      const data = await post_call_module(payload,"authors");
+      const data = await post_call_module(payload,"shows");
       console.log(data); // Log the authors data
       return data;
     } catch (error) {
-      console.error('Error fetching authors:', error);
+      console.error('Error adding:', error);
     }
   };
   const getMovie = async () => {
@@ -119,7 +110,7 @@ const ActorForm = () => {
   };
   const removeMovie = async (id) => {
     try {
-      const data = await delete_call_module("authors",id);
+      const data = await delete_call_module("shows",id);
       refetch();
       console.log(data); // Log the authors data
       return data;
@@ -173,6 +164,7 @@ const ActorForm = () => {
     queryKey: ['movies'],
     queryFn: getMovie,
   })
+  console.log(movieData);
   const {isLoading: isAuthorLoading, data: authorData, error: authorError} = useQuery({
     queryKey: ['authors'],
     queryFn: getAuthor,
@@ -190,7 +182,7 @@ const ActorForm = () => {
 
     const booleanValue = selectedValue === "true";
 console.log(newmovieData);
-    // await addMovie(newMovie);
+    await addMovie(newmovieData);
     // setNewMovie({ name: '', description: '' });
     refetch();
     
@@ -371,7 +363,7 @@ console.log(newmovieData);
 
             </div>
             <div className="flex flex-col gap-4 w-2/5 h-full bg-sky-500 border-y-4 border border-blue-700 rounded-3xl">
-              <Uploady destination={{ url: "https://localhost/upload" }}>
+              <Uploady destination={{ url: "http://localhost:8000/shows"  }}>
                 <UploadDropZone
                   onDragOverClassName="drag-over"
                   grouped
@@ -427,12 +419,11 @@ console.log(newmovieData);
                         backgroundColor: 'transparent',
                       }}>
                         <div>
+                         
                           <Image
                             width={150}
                             height={150}
-                            // src={movie.picture_url}
-                            src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-
+                            src={`${baseUrl}/storage/${movie.picture_url}`}
                             alt={`Image ${movie.id + 1}`}
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                           />
@@ -445,10 +436,13 @@ console.log(newmovieData);
                         }}>
                           <p>{movie.first_release_date}</p>
                           <button onClick={(e) => e.stopPropagation()} type="button" class="text-white font-small rounded-lg text-xs font-thin w-max h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>edit</button>
-
+                          <button onClick={() => removeMovie(movie.id)} type="button" className="text-white font-small rounded-lg text-xs font-thin w-min h-max" style={{ background: 'linear-gradient(180deg, #5c6db3 , #232c31, #5c6db3)' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                  <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+                </svg>
+              </button>
                           {/* Add more details or components here as needed */}
                         </div>
-
                       </div>
                     )}
                   </div>
@@ -463,11 +457,12 @@ console.log(newmovieData);
 
       <div style={{ height: '25%', width: '80%', alignSelf: 'center' }}>
         <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index} style={{ maxHeight: '100px' }}>
-              <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', maxHeight: '100px', maxWidth: '200px' }} />
+          {movieData.map((movie) => (
+            <div key={movie.id} style={{ maxHeight: '100px' }}>
+              <img src={`${baseUrl}/storage/${movie.picture_url}`}  alt={`Image ${movie.id + 1}`} style={{ width: '100%', maxHeight: '100px', maxWidth: '200px' }} />
             </div>
           ))}
+        
         </Slider>
       </div>
     </div>

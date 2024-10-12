@@ -13,6 +13,12 @@ import { Card, CardBody } from "@nextui-org/react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 import { Input } from "@nextui-org/input";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
 const initialMoviesByMonth = {
   January: ['Movie 1 when you click you can also view movies details on a popup', 'Movie 2'],
@@ -20,14 +26,61 @@ const initialMoviesByMonth = {
   June: ['Movie 5', 'Movie 6'],
   // Add more months and movies
 };
-const animals = [
-  { key: "cat", label: "Cat" },
-  { key: "dog", label: "Dog" },
-  { key: "elephant", label: "Elephant" },
-  { key: "lion", label: "Lion" },
 
-];
 const Watchlist = () => {
+  const getAuthor = async () => {
+    try {
+      const data = await get_call_module("authors")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const getActor = async () => {
+    try {
+      const data = await get_call_module("actors")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const getGenre = async () => {
+    try {
+      const data = await get_call_module("genres")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const getMovie = async () => {
+    try {
+      const data = await get_call_module("shows")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const {isLoading: isMovieLoading, data: movieData, error: movieError, refetch} = useQuery({
+    queryKey: ['movies'],
+    queryFn: getMovie,
+  })
+  console.log(movieData);
+  const {isLoading: isAuthorLoading, data: authorData, error: authorError} = useQuery({
+    queryKey: ['authors'],
+    queryFn: getAuthor,
+  })
+  const {isLoading: isActorLoading, data: actorData, error: actorError} = useQuery({
+    queryKey: ['actors'],
+    queryFn: getActor,
+  })
+  const {isLoading: isGenreLoading, data: genreData, error: genreError} = useQuery({
+    queryKey: ['genres'],
+    queryFn: getGenre,
+  })
   const settings = {
     // dots: true,
     // infinite: true,
@@ -79,7 +132,9 @@ const Watchlist = () => {
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
-
+  if (isMovieLoading || isAuthorLoading || isActorLoading || isGenreLoading) return 'Loading...'
+  if (movieError || authorError || actorError ||  genreError) return 'An error has occurred: ' +  (movieError?.message || authorError?.message || actorError?.message || genreError?.message)
+ 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '6px' }}>
 
@@ -112,11 +167,12 @@ const Watchlist = () => {
                 onSelectionChange={setSelectedKeys}
                 style={{ borderRadius: '15px', color: '#155e75' }}
               >
-                <DropdownItem key="text">Text</DropdownItem>
-                <DropdownItem key="number">Number</DropdownItem>
-                <DropdownItem key="date">Date</DropdownItem>
-                <DropdownItem key="single_date">Single Date</DropdownItem>
-                <DropdownItem key="iteration">Iteration</DropdownItem>
+                   {genreData.map((genre) => (
+                <DropdownItem  key={genre.id}
+                value={genre.id}>
+                {genre.name}</DropdownItem>
+                   ))}
+               
               </DropdownMenu>
             </Dropdown>
 
@@ -129,14 +185,15 @@ const Watchlist = () => {
               variant='bordered'
               style={{ borderRadius: '15px', color: '#155e75' }}
             >
-              {animals.map((animal) => (
-                <SelectItem
-                  color="black"
-                  style={{ color: '#155e75' }}
-                  key={animal.key}>
-                  {animal.label}
-                </SelectItem>
-              ))}
+                {actorData.map((actor) => (
+                      <SelectItem
+                        color="black"
+                        style={{ color: '#155e75' }}
+                        key={actor.id}
+                        value={actor.id}>
+                        {actor.name}
+                      </SelectItem>
+                    ))}
             </Select>
 
             <Select
@@ -147,14 +204,15 @@ const Watchlist = () => {
               variant='bordered'
               style={{ borderRadius: '15px', color: 'white' }}
             >
-              {animals.map((animal) => (
-                <SelectItem
-                  color="black"
-                  style={{ color: '#155e75' }}
-                  key={animal.key}>
-                  {animal.label}
-                </SelectItem>
-              ))}
+               {authorData.map((author) => (
+                      <SelectItem
+                        color="black"
+                        style={{ color: '#155e75' }}
+                        key={author.id}
+                        value={author.id}>
+                        {author.name}
+                      </SelectItem>
+                    ))}
             </Select>
             <Input className="h-2 w-1/6" label="name" onClear={() => console.log("input cleared")} />
 

@@ -1,7 +1,30 @@
 import React, { useState } from 'react';
 import {Image} from "@nextui-org/image";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
+
 
 const MovieForm = ({ onAddMovie, genres, authors }) => {
+  const getMovie = async () => {
+    try {
+      const data = await get_call_module("shows")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const {isLoading: isMovieLoading, data: movieData, error: movieError, refetch} = useQuery({
+    queryKey: ['movies'],
+    queryFn: getMovie,
+  })
+  console.log(movieData);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const [newMovie, setNewMovie] = useState({
     title: '', 
     type: '', 
@@ -39,19 +62,10 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
       is_upcoming: false
     });
   };
-  const images = [
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    // more images
-  ];
+ 
   
+  if (isMovieLoading) return 'Loading...'
+  if ( movieError) return 'An error has occurred: ' +  (movieError?.message)
 
   return (
     // <div>
@@ -193,16 +207,15 @@ const MovieForm = ({ onAddMovie, genres, authors }) => {
       gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
       gap: '16px',
     }}>
-         {images.map((image, index) => (
-            <div key={index} style={{ overflow: 'hidden', borderRadius: '8px' }}>
+        {movieData.map((movie) => (
+            <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
               <Image
                 width={150}
                 height={150}
-                src={image}
-                alt={`Image ${index + 1}`}
+                src={`${baseUrl}/storage/${movie.picture_url}`}
+                alt={`Image ${movie.id + 1}`}
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
-              <h1>hjv</h1>
             </div>
           ))}
      

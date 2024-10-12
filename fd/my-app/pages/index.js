@@ -153,8 +153,29 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import {Image} from "@nextui-org/image";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
 const Home = () => {
+  const getMovie = async () => {
+    try {
+      const data = await get_call_module("shows")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const {isLoading: isMovieLoading, data: movieData, error: movieError, refetch} = useQuery({
+    queryKey: ['movies'],
+    queryFn: getMovie,
+  })
+  console.log(movieData);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const settings = {
     // dots: true,
     // infinite: true,
@@ -169,18 +190,12 @@ const Home = () => {
     // arrows: true, // Show next/prev arrows
     centerMode: false, // Do not center the active slide
   };
-  const images = [
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    // more images
-  ];
+  const lastAddedMovie = movieData && movieData.length > 0 ? movieData[movieData.length - 1] : null;
+
+  console.log(lastAddedMovie);
+  if (isMovieLoading) return 'Loading...'
+  if ( movieError) return 'An error has occurred: ' +  (movieError?.message)
+
   return (
     <div style={{ display: 'flex', flexDirection:'column', gap: '16px', minHeight:'95vh' }}>
   <Head>
@@ -192,7 +207,7 @@ const Home = () => {
   <div style={{
     flex: '2',
     position: 'relative', // Relative to position the slider correctly
-    background: 'url("https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
+    background: `url(${baseUrl}/storage/${lastAddedMovie.picture_url})`,
     backgroundRepeat: 'no-repeat',
     height: '95vh',
     color: '#fff',
@@ -238,9 +253,9 @@ const Home = () => {
       zIndex: 2, // Ensure it appears above other content
     }}>
       <Slider {...settings}>
-        {images.map((image, index) => (
-          <div key={index} style={{ maxHeight: '187px' }}>
-            <img src={image} alt={`Image ${index + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }} />
+        {movieData.map((movie)=> (
+          <div key={movie.id} style={{ maxHeight: '187px' }}>
+            <img src={`${baseUrl}/storage/${movie.picture_url}`} alt={`Image ${movie.id + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }} />
           </div>
         ))}
       </Slider>
