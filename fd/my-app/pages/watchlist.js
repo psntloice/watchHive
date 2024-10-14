@@ -314,6 +314,7 @@ console.log(months);
             </Card>
             <Card style={{ height: '100%', flex: '1', justifyContent: 'center', color: 'white', background: 'transparent' }}>
               <CardBody>
+              <div  style={{ width:'100%', textAlign:'center', fontStyle: 'italic'}}>{pickedMovie.type}</div>
               <p> Written By: {pickedMovie.author.name}</p>
                        <p>  Genre: {pickedMovie.genre.name}</p>
                        {/* <p>  Actors: {movie.actor.name}</p> */}

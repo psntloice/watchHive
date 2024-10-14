@@ -22,12 +22,9 @@ export default function MoviesDropdown() {
     const nextMonth = formatter.format(new Date(now.getFullYear(), nextMonthIndex));
   
     // Return the results
-    return {
-      previousMonth,
-      currentMonth,
-      nextMonth
-    };
+    return [previousMonth, currentMonth, nextMonth];
   };
+  console.log(getPreviousCurrentNextMonth());
   const moviesByMonth = getPreviousCurrentNextMonth();
   const [selectedMonth, setSelectedMonth] = useState(null);
 
@@ -37,10 +34,10 @@ export default function MoviesDropdown() {
 
   return (
     <div>
-      {Object.keys(moviesByMonth).map((month) => (
-        <div key={month} style={{ marginBottom: '16px' }}>
+      {/* {Object.keys(moviesByMonth).map((month, index) => (
+        <div key={index} style={{ marginBottom: '16px' }}>
           <button
-            onClick={() => toggleDropdown(month)}
+            // onClick={() => toggleDropdown(month)}
             style={{
               padding: '10px',
               borderRadius: '4px',
@@ -88,6 +85,54 @@ export default function MoviesDropdown() {
               </p>
 
                 
+              ))}
+            </div>
+          )}
+        </div>
+      ))} */}
+       {moviesByMonth.map((month, index) => (
+        <div key={index} style={{ marginBottom: '16px' }}>
+          <button
+            onClick={() => toggleDropdown(month)}
+            style={{
+              padding: '10px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              width: '100%',
+              textAlign: 'left',
+              backgroundColor: '#0e2f53e5',
+              border: '1px solid #ddd',
+            }}
+          >
+            {month}
+          </button>
+          {selectedMonth === month && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '16px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                marginTop: '8px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              }}
+            >
+              {moviesByMonth[month]?.map((movie, movieIndex) => (
+                <p key={movieIndex} style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%',
+                }}>
+                  {movie}
+                  <span style={{
+                    display: 'flex',
+                    flexDirection: 'row-reverse',
+                    width: '80%',
+                  }}>
+                    {/* Your SVGs here */}
+                  </span>
+                </p>
               ))}
             </div>
           )}
