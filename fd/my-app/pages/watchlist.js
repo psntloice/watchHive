@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Image } from "@nextui-org/image";
 import MoviesDropdown from '@/components/Dropdown';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
@@ -28,6 +28,45 @@ const initialMoviesByMonth = {
 };
 
 const Watchlist = () => {
+  const getPreviousCurrentNextMonth = () => {
+    const now = new Date(); // Get the current date
+  
+    // Create a formatter for the month name
+    const formatter = new Intl.DateTimeFormat('en-US', { month: 'long' });
+  
+    // Get the current month index (0-11)
+    const currentMonthIndex = now.getMonth();
+  
+    // Calculate previous and next month indices
+    const previousMonthIndex = (currentMonthIndex - 1 + 12) % 12; // Wrap around if necessary
+    const nextMonthIndex = (currentMonthIndex + 1) % 12; // Wrap around if necessary
+  
+    // Get month names using the formatter
+    const previousMonth = formatter.format(new Date(now.getFullYear(), previousMonthIndex));
+    const currentMonth = formatter.format(now);
+    const nextMonth = formatter.format(new Date(now.getFullYear(), nextMonthIndex));
+  
+    // Return the results
+    return {
+      previousMonth,
+      currentMonth,
+      nextMonth
+    };
+  };
+  const months = getPreviousCurrentNextMonth();
+console.log(months); 
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const [pickedMovie, setPicked] = useState(null);
+
+  // Log the picked movie whenever it changes
+  useEffect(() => {
+    if (pickedMovie) {
+      console.log('Selected Movie:', pickedMovie);
+    }
+  }, [pickedMovie]);
+
+
   const getAuthor = async () => {
     try {
       const data = await get_call_module("authors")
@@ -95,8 +134,7 @@ const Watchlist = () => {
     // arrows: true, // Show next/prev arrows
     centerMode: false, // Do not center the active slide
   };
-
-  const [moviesByMonth, setMoviesByMonth] = useState(initialMoviesByMonth);
+  const [moviesByMonth, setMoviesByMonth] = useState(months);
   const [watchlist, setWatchlist] = useState({});
   const [newMonth, setNewMonth] = useState('');
   const [newMovie, setNewMovie] = useState('');
@@ -124,7 +162,10 @@ const Watchlist = () => {
   };
 
 
-
+  const handleRowClick = (index) => {
+    setPicked(index);
+    console.log(index);
+  };
 
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
 
@@ -237,27 +278,20 @@ const Watchlist = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr class="opacity-70 py-0.5 px-2 tracking-wide hover:ring-2">
-                  <td >add when selected its specific background color is different</td>
-                  <td >Malcolm Lockyer</td>
-                  <td >1961</td>
-                  <td >Malcolm Lockyer</td>
-                  <td >1961</td>
-                </tr>
-                <tr class="opacity-70 py-0.5 px-2 tracking-wide hover:ring-2">
-                  <td>Witchy Woman</td>
-                  <td>The Eagles</td>
-                  <td>1972</td>
-                  <td>Malcolm Lockyer</td>
-                  <td>1961</td>
-                </tr>
-                <tr class="opacity-70 py-0.5 px-2 tracking-wide hover:ring-2">
-                  <td>Shining Star</td>
-                  <td>Earth, Wind, and Fire</td>
-                  <td>1975</td>
-                  <td>Malcolm Lockyer</td>
-                  <td>1961</td>
-                </tr>
+              {movieData.map((movie) => (
+          <tr
+            key={movie.id}
+            onClick={() => handleRowClick(movie)}
+            className="opacity-70 py-0.5 px-2 tracking-wide hover:ring-2"
+            style={{ backgroundColor: movie.isSelected ? '#1a4b6f' : 'inherit' }} // Example to change background color if selected
+          >
+            <td>{movie.title}</td>
+            <td>{movie.actors.map(actor => actor.name).join(', ')}</td>
+            <td>{movie.genre ? movie.genre.name : 'N/A'}</td>
+            <td>{movie.author ? movie.author.name : 'N/A'}</td>
+            <td>{movie.inWatchlist ? 'Yes' : 'No'}</td>
+          </tr>
+        ))}
               </tbody>
             </table>
 
@@ -266,22 +300,29 @@ const Watchlist = () => {
         </div>
 
         <div style={{ flex: '1', display: 'flex', flexDirection: 'column', width: '100%' }}>
-          <div style={{ flex: '1', display: 'flex', flexDirection: 'row', width: '100%', padding: '10px' }}>
+        {pickedMovie && ( <div style={{ flex: '1', display: 'flex', flexDirection: 'row', width: '100%', padding: '10px' }}>
+        
             <Card style={{ height: '100%', flex: '0 1 40%', backgroundColor: 'transparent', padding: '10px', justifyContent: 'center' }}>
               <CardBody>
                 <Image
                   width={300}
-                  alt="NextUI hero Image"
-                  src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  alt="Movie Image"
+                  src={`${baseUrl}/storage/${pickedMovie.picture_url}`}
                   style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
                 />
               </CardBody>
             </Card>
             <Card style={{ height: '100%', flex: '1', justifyContent: 'center', color: 'white', background: 'transparent' }}>
               <CardBody>
-                <p>Details about the movie. Can show if already its in a watchlist and give a chance to move. may show history of when added, when released if watched</p>
-              </CardBody>
-            </Card>          </div>
+              <p> Written By: {pickedMovie.author.name}</p>
+                       <p>  Genre: {pickedMovie.genre.name}</p>
+                       {/* <p>  Actors: {movie.actor.name}</p> */}
+                       <p> First release: {pickedMovie.first_release_date}</p>
+                       <p> Next release: {pickedMovie.next_release_date}</p>
+                       <p> Sequel: {pickedMovie.next_release_date}</p>
+                       <p> Talks of this and that</p>
+                       <p> actors: {pickedMovie.next_release_date}</p>              </CardBody>
+            </Card>          </div>)}
 
           <div style={{ flex: '0 1 10%', display: 'flex', flexDirection: 'column', width: '100%' }}>
             <button

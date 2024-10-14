@@ -13,6 +13,6 @@ class Actor extends Model
         'description'
     ];
     public function shows() {
-        return $this->belongsToMany(Show::class, 'actor_show', 'actor_id', 'show_id');
+        return $this->belongsToMany(Show::class, 'show__actors', 'show_id','actor_id');
     }
 }

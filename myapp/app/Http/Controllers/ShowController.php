@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Show;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Exception;
+use Illuminate\Support\Facades\Log;
+use function Laravel\Prompts\error;
 
 class ShowController extends Controller
 {
@@ -20,7 +22,18 @@ class ShowController extends Controller
         // }
         
         // return response()->json($movies);
-    return Show::all();
+    // return Show::all();
+    // error(Show::with('genre')->get());
+    $movies = Show::with('genre')->get();
+    
+    // Log the movies for debugging (optional)
+    Log::info($movies);
+
+    // Make sure to return the response
+    return Show::with(['genre', 'actors', 'author'])->get();
+
+    return response()->json($movies);
+
     }
 
     public function show($id)
@@ -36,43 +49,57 @@ class ShowController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
-                'genre_id' => 'required|exists:genres,id',
-                'actor_id' => 'required|exists:actors,id',
+'genre_id' => 'required|array', // Accept an array of genre IDs
+// 'genre_id.*' => 'exists:genres,id',
+                // 'actor_id' => 'nullable|array', // Allow an array of actor IDs
+                // 'actor_id.*' => 'exists:actors,id',                 
+                // 'actor_id' => 'required|exists:actors,id',
                 'author_id' => 'required|exists:authors,id',
                 'first_release_date' => 'nullable|date',
                 'next_release_date' => 'nullable|date',
                 'sequel_id' => 'nullable|exists:shows,id',
                 // 'has_sequel' => 'boolean',
                 // 'is_upcoming' => 'boolean',
-                'picture_url' => 'image|max:2048'
+                // 'picture_url' => 'image|max:2048'
             ]);
     
-            // Step 2: Handle the image upload
-            if ($request->hasFile('picture_url')) {
-                $image = $request->file('picture_url');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('public/images', $imageName);
+            // // Step 2: Handle the image upload
+            // if ($request->hasFile('picture_url')) {
+            //     $image = $request->file('picture_url');
+            //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+            //     $imagePath = $image->storeAs('public/images', $imageName);
                 
-                if ($imagePath) {
-                    // Image uploaded successfully
-                    $pictureUrl = 'images/' . $imageName;
-                    error_log("Image uploaded successfully: " . $pictureUrl);
+            //     if ($imagePath) {
+            //         // Image uploaded successfully
+            //         $pictureUrl = 'images/' . $imageName;
+            //         error_log("Image uploaded successfully: " . $pictureUrl);
                     
-                    // Add the image path to the validated data
-                    $validatedData['picture_url'] = $pictureUrl;
-                } else {
-                    // Failed to upload the image
-                    error_log("Failed to upload the image.");
-                    return response()->json(['error' => 'Image upload failed.'], 500);
-                }
-            } else {
-                // No image uploaded
-                error_log("No image uploaded in the request.");
-                return response()->json(['error' => 'No image uploaded.'], 400);
-            }
-    
+            //         // Add the image path to the validated data
+            //         $validatedData['picture_url'] = $pictureUrl;
+            //     } else {
+            //         // Failed to upload the image
+            //         error_log("Failed to upload the image.");
+            //         return response()->json(['error' => 'Image upload failed.'], 500);
+            //     }
+            // } else {
+            //     // No image uploaded
+            //     error_log("No image uploaded in the request.");
+            //     return response()->json(['error' => 'No image uploaded.'], 400);
+            // }
+            $show = Show::create([
+                'title' => $validatedData['title'],
+                'type' => $validatedData['type'],
+                'genre_id' => $validatedData['genre_id'],
+                'author_id' => $validatedData['author_id'],
+                // 'picture_url' => $validatedData['picture_url'],
+               
+                'has_sequel' => $validatedData['has_sequel'] ?? false,
+                'is_upcoming' => $validatedData['is_upcoming'] ?? false,
+            ]);
+        // Attach actors to the show using the pivot table
+        // $show->actors()->attach($validatedData['actor_id']);
             // Step 3: Create a new Show record using the validated data
-            $show = Show::create($validatedData);
+            // $show = Show::create($validatedData);
     
             if ($show) {
                 // Successfully created the Show

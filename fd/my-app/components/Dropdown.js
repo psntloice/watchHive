@@ -1,13 +1,34 @@
 import { useState } from 'react';
 
-const moviesByMonth = {
-  January: ['Movie 1 when you click you can also view movies details on a popup', 'Movie 2'],
-  February: ['Movie 3 i dont understand the diff btn this and the other constant in watchlist initial movies by month', 'Movie 4'],
-  June: ['Movie 5 Movie 3  consider that a movie can have more than one genres', 'Movie 6'],
-  // Add more months and movies
-};
+
 
 export default function MoviesDropdown() {
+  const getPreviousCurrentNextMonth = () => {
+    const now = new Date(); // Get the current date
+  
+    // Create a formatter for the month name
+    const formatter = new Intl.DateTimeFormat('en-US', { month: 'long' });
+  
+    // Get the current month index (0-11)
+    const currentMonthIndex = now.getMonth();
+  
+    // Calculate previous and next month indices
+    const previousMonthIndex = (currentMonthIndex - 1 + 12) % 12; // Wrap around if necessary
+    const nextMonthIndex = (currentMonthIndex + 1) % 12; // Wrap around if necessary
+  
+    // Get month names using the formatter
+    const previousMonth = formatter.format(new Date(now.getFullYear(), previousMonthIndex));
+    const currentMonth = formatter.format(now);
+    const nextMonth = formatter.format(new Date(now.getFullYear(), nextMonthIndex));
+  
+    // Return the results
+    return {
+      previousMonth,
+      currentMonth,
+      nextMonth
+    };
+  };
+  const moviesByMonth = getPreviousCurrentNextMonth();
   const [selectedMonth, setSelectedMonth] = useState(null);
 
   const toggleDropdown = (month) => {

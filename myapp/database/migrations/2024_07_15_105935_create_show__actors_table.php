@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('actor_id');
             $table->foreignId('show_id');
             $table->timestamps();
-
+            // $table->unique(['actor_id', 'show_id']);
             $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
             $table->foreign('show_id')->references('id')->on('shows')->onDelete('cascade');
         });
