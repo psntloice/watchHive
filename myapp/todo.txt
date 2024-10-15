@@ -18,3 +18,8 @@ how to handle that issue on update author since its picking idiff keys
 
 
 handle errors of empty cases where either description or somethings is empty
+
+
+deal with the alternatives
+
+make favourites in db to be unique and may instead add strenght of the favourites

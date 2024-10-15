@@ -2,21 +2,17 @@ import React, { useState } from 'react';
 import {Image} from "@nextui-org/image";
 import {Input} from "@nextui-org/input";
 import {Switch} from "@nextui-org/react";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
 const Favourites = () => {
  
-  const images = [
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    // more images
-  ];
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const [switchStates, setSwitchStates] = useState({
     genre: false,
     actor: false,
@@ -31,7 +27,22 @@ const Favourites = () => {
     }));
   };
  
-
+  const getFavourites = async () => {
+    try {
+      const data = await get_call_module("favourites")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const {isLoading: isFavLoading, data: favData, error: favError} = useQuery({
+    queryKey: ['favs'],
+    queryFn: getFavourites,
+  });
+  if (isFavLoading) return 'Loading...'
+  if (favError) return 'An error has occurred: ' +  (favError?.message)
+console.log(favData);
   return (
   
     <div>
@@ -123,25 +134,24 @@ author      </label>
       gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
       gap: '16px',
     }}>
-         {images.map((image, index) => (
-            <div key={index} style={{ overflow: 'hidden', borderRadius: '8px' }}>
+         {favData.map((movie) => (
+            <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
               <Image
                 width={150}
                 height={150}
-                src={image}
-                alt={`Image ${index + 1}`}
+                src={`${baseUrl}/storage/${movie.show.picture_url}`}
+                // alt={`Image ${movie.id + 1}`}
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
-              <h1>hjv</h1>
             </div>
           ))}
      
-     <Image
+     {/* <Image
     width={300}
     alt="NextUI hero Image"
     src="https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
     style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
-  />
+  /> */}
     </div>
 
     </div>

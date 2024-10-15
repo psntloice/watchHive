@@ -147,6 +147,7 @@
 
 
 // pages/index.js
+import { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Index.module.css';
 import Slider from "react-slick";
@@ -191,8 +192,36 @@ const Home = () => {
     centerMode: false, // Do not center the active slide
   };
   const lastAddedMovie = movieData && movieData.length > 0 ? movieData[movieData.length - 1] : null;
+  const [selectedMovie, setSelectedMovie] = useState(lastAddedMovie);
 
+  const handleAddToWatchlist = (themovie, movie) => {
+    setSelectedMovie(movie);
+
+    if (1 !== themovie) { // Update state only if a different movie is clicked
+      setSelectedMovie(movie);
+    }        console.log("hurraaay");
+  };
   console.log(lastAddedMovie);
+  const addToFavourites = async (payload) => {
+    try {
+      const data = await post_call_module(payload,"favourites");
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error adding:', error);
+    }
+  }
+  const [isActive, setIsActive] = useState(false);
+  const handleFavourites = (id) => {
+    console.log(id);
+    const payload = {
+      user_id: 1,
+      show_id: id,
+    };
+    // addToFavourites(payload);
+    setIsActive((prev) => !prev);
+
+  };
   if (isMovieLoading) return 'Loading...'
   if ( movieError) return 'An error has occurred: ' +  (movieError?.message)
 
@@ -207,7 +236,7 @@ const Home = () => {
   <div style={{
     flex: '2',
     position: 'relative', // Relative to position the slider correctly
-    background: `url(${baseUrl}/storage/${lastAddedMovie.picture_url})`,
+    background: `url(${baseUrl}/storage/${selectedMovie.picture_url})`,
     backgroundRepeat: 'no-repeat',
     height: '95vh',
     color: '#fff',
@@ -236,9 +265,23 @@ const Home = () => {
           maxWidth: '80%',
           textAlign: 'center',
         }}>
-          <h2>Image Details</h2>
-          <p>Some interesting details about the image go here.</p>
-        </div>
+          <p> Written By: {selectedMovie.author.name}</p>
+                       <p>  Genre: {selectedMovie.genre.name}</p>
+                       {/* <p>  Actors: {movie.actor.name}</p> */}
+                       <p> First release: {selectedMovie.first_release_date}</p>
+                       <p> Next release: {selectedMovie.next_release_date}</p>
+                       <p> Sequel: {selectedMovie.next_release_date}</p>
+                       <p> Talks of this and that</p>
+
+                       very detailed explanation
+                       <p> actors: {selectedMovie.next_release_date}</p>    
+                       <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} 
+                      //  onClick={() => handleFavourites(pickedMovie.id)}
+                       >     
+                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isActive ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg> add to favorites
+</button>      </div>
       </div>
       
     </div>
@@ -255,7 +298,8 @@ const Home = () => {
       <Slider {...settings}>
         {movieData.map((movie)=> (
           <div key={movie.id} style={{ maxHeight: '187px' }}>
-            <img src={`${baseUrl}/storage/${movie.picture_url}`} alt={`Image ${movie.id + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }} />
+            <img src={`${baseUrl}/storage/${movie.picture_url}`} alt={`Image ${movie.id + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }}
+            onClick={() => handleAddToWatchlist(movie.id, movie)}  />
           </div>
         ))}
       </Slider>
