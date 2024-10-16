@@ -187,19 +187,19 @@ const Watchlist = () => {
   };
   const moviesByMonth = getPreviousCurrentNextMonth();
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const getFavourites = async () => {
-    try {
-      const data = await get_call_module("favourites")
-      console.log(data); // Log the authors data
-      return data;
-    } catch (error) {
-      console.error('Error fetching authors:', error);
-    }
-  };
-  const {isLoading: isFavLoading, data: favData, error: favError} = useQuery({
-    queryKey: ['favs'],
-    queryFn: getFavourites,
-  })
+  // const getFavourites = async () => {
+  //   try {
+  //     const data = await get_call_module("favourites")
+  //     console.log(data); // Log the authors data
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Error fetching authors:', error);
+  //   }
+  // };
+  // const {isLoading: isFavLoading, data: favData, error: favError} = useQuery({
+  //   queryKey: ['favs'],
+  //   queryFn: getFavourites,
+  // })
   const addToFavourites = async (payload) => {
     try {
       const data = await post_call_module(payload,"favourites");

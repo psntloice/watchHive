@@ -23,3 +23,6 @@ handle errors of empty cases where either description or somethings is empty
 deal with the alternatives
 
 make favourites in db to be unique and may instead add strenght of the favourites
+
+
+on favourites add the if for just incase its not working

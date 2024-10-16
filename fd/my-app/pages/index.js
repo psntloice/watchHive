@@ -162,6 +162,23 @@ import {
 import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
 const Home = () => {
+  const getFavourites = async () => {
+    try {
+      const data = await get_call_module("favourites")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const {isLoading: isFavLoading, data: favData, error: favError} = useQuery({
+    queryKey: ['favs'],
+    queryFn: getFavourites,
+  });
+  // const getMovie = async () => {
+  //   if (favData.show_id===movieData.id) return console.log("hushsbh");
+  // }
+  // console.log(favData.);
   const getMovie = async () => {
     try {
       const data = await get_call_module("shows")
@@ -222,6 +239,11 @@ const Home = () => {
     setIsActive((prev) => !prev);
 
   };
+  // let isFavorite = false;
+//   if (favData.id === selectedMovie.id) {
+//     console.log("hushsbh");
+//     isFavorite = true; // You can use this flag to show something different in the JSX if needed
+// }
   if (isMovieLoading) return 'Loading...'
   if ( movieError) return 'An error has occurred: ' +  (movieError?.message)
 
@@ -274,11 +296,12 @@ const Home = () => {
                        <p> Talks of this and that</p>
 
                        very detailed explanation
-                       <p> actors: {selectedMovie.next_release_date}</p>    
+                       <p> actors: {selectedMovie.next_release_date}</p>
+                           
                        <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} 
                       //  onClick={() => handleFavourites(pickedMovie.id)}
                        >     
-                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isActive ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isFavourite ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg> add to favorites
 </button>      </div>
