@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {Image} from "@nextui-org/image";
 import {Input} from "@nextui-org/input";
 import {Switch} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+
 import {
   QueryClient,
   QueryClientProvider,
@@ -12,7 +14,20 @@ import { get_call_module, post_call_module, put_call_module, delete_call_module 
 const Favourites = () => {
  
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
+  const [modalData, setModalData] = useState(null);
+  const handleMOdal = (details) => {
+    // onOpen
+    console.log(open); // Log when the modal is opened
+    console.log(details);
+    onOpenChange(open);
+    // Update the modal state
+    if (details) {
+      setModalData(details);
+
+      console.log('Modal is now open'); // Log when the modal is opened
+    }  };
   const [switchStates, setSwitchStates] = useState({
     genre: false,
     actor: false,
@@ -137,6 +152,7 @@ author      </label>
          {favData.map((movie) => (
             <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
               <Image
+              onClick={() =>handleMOdal(movie)}
                 width={150}
                 height={150}
                 src={`${baseUrl}/storage/${movie.show.picture_url}`}
@@ -153,7 +169,38 @@ author      </label>
     style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
   /> */}
     </div>
-
+    <Modal 
+             size='xs'
+        isOpen={isOpen} 
+        onOpenChange={handleMOdal} 
+        placement='center'
+        className='z-40'
+        style={{width:'20%',background:'white', color:'black', zIndex: 1000, }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+              <ModalBody>
+     {modalData?.title}
+     <p> Written By: {modalData?.show.author.name}</p>
+                       <p>  Genre: {modalData?.show.genre.name}</p>
+                       {/* <p>  Actors: {modalData?.actor.name}</p> */}
+                       <p> First release: {modalData?.first_release_date}</p>
+                       <p> Next release: {modalData?.next_release_date}</p>
+                       <p> Sequel: {modalData?.next_release_date}</p>
+                       <p> Talks of this and that</p>
+                       <p> actors: {modalData?.next_release_date}</p>
+                         </ModalBody>
+              <ModalFooter>
+                {/* <Button color="primary" variant="light" onPress={() => handleAddToWatchlist}>
+                  Add
+                </Button> */}
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

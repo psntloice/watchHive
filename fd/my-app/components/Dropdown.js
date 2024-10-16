@@ -1,8 +1,16 @@
 import { useState } from 'react';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
+
 
 
 
 export default function MoviesDropdown() {
+  
   const getPreviousCurrentNextMonth = () => {
     const now = new Date(); // Get the current date
   
@@ -31,7 +39,24 @@ export default function MoviesDropdown() {
   const toggleDropdown = (month) => {
     setSelectedMonth(selectedMonth === month ? null : month);
   };
-
+  const getWatchlist = async () => {
+    try {
+      const data = await get_call_module("watchlists")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+ 
+  const {isLoading: isWatchLoading, data: watchlistData, error:watchlistError, refetch} = useQuery({
+    queryKey: ['watchList'],
+    queryFn: getWatchlist,
+  });
+  const refetchWatchlist = () => {
+    console("tumerudi hapa");
+        refetch();
+  }
   return (
     <div>
       {/* {Object.keys(moviesByMonth).map((month, index) => (
@@ -118,20 +143,23 @@ export default function MoviesDropdown() {
                 boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
               }}
             >
-              {moviesByMonth[month]?.map((movie, movieIndex) => (
-                <p key={movieIndex} style={{
+                            { watchlistData?.map((watch) => (
+
+            //{/* { watchlistData[month]?.map((movie, movieIndex) => ( */}
+                <p key={watch.id} style={{
                   display: 'flex',
                   flexDirection: 'row',
                   width: '100%',
                 }}>
-                  {movie}
+                  {selectedMonth.toLowerCase() === watch.month.toLowerCase() && (
                   <span style={{
                     display: 'flex',
-                    flexDirection: 'row-reverse',
-                    width: '80%',
+                    width: '60%',
                   }}>
-                    {/* Your SVGs here */}
+                    {watch.show.title}
                   </span>
+                 
+)}
                 </p>
               ))}
             </div>

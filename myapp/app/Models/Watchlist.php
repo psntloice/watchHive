@@ -15,7 +15,7 @@ class Watchlist extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function shows() {
+    public function show() {
         return $this->belongsTo(Show::class);
     }
 }

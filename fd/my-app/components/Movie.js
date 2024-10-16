@@ -135,6 +135,7 @@ const filteredMovies = movieData.filter((movie) => {
                 height={150}
                 src={`${baseUrl}/storage/${movie.picture_url}`}
                 alt={`Image ${movie.id + 1}`}
+                className='z-0'
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
           </div>
@@ -142,11 +143,21 @@ const filteredMovies = movieData.filter((movie) => {
       ) : (
         <p>No movies found</p>
       )}
-             <Modal 
+        
+     {/* <Image
+    width={300}
+    alt="NextUI hero Image"
+    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
+    style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
+  /> */}
+    </div>
+    
+    <Modal 
              size='xs'
         isOpen={isOpen} 
         onOpenChange={handleMOdal} 
         placement='center'
+        className='z-40'
         style={{width:'20%',background:'white', color:'black', zIndex: 1000, }}
       >
         <ModalContent>
@@ -173,15 +184,6 @@ const filteredMovies = movieData.filter((movie) => {
           )}
         </ModalContent>
       </Modal>
-     {/* <Image
-    width={300}
-    alt="NextUI hero Image"
-    src="https://nextui-docs-v2.vercel.app/images/hero-card-complete.jpeg"
-    style={{ gridColumn: 'span 2' }} // Optional: This makes the image span two columns
-  /> */}
-    </div>
-    
-      
 
     </div>
   );

@@ -75,64 +75,81 @@ const Watchlist = () => {
       console.error('Error fetching authors:', error);
     }
   };
-  const {isLoading: isMovieLoading, data: movieData, error: movieError, refetch} = useQuery({
+  const getWatchlist = async () => {
+    try {
+      const data = await get_call_module("watchlists")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const addToWatchlist = async (payload) => {
+    try {
+      const data = await post_call_module(payload,"watchlists");
+      MoviesDropdown.refetchWatchlist();
+            console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error adding:', error);
+    }
+  };
+  const {isLoading: isWatchLoading, data: watchlistData, error:watchlistError} = useQuery({
+    queryKey: ['watchList'],
+    queryFn: getWatchlist,
+  });
+  const {isLoading: isMovieLoading, data: movieData, error: movieError} = useQuery({
     queryKey: ['movies'],
     queryFn: getMovie,
-  })
+  });
   console.log(movieData);
   const {isLoading: isAuthorLoading, data: authorData, error: authorError} = useQuery({
     queryKey: ['authors'],
     queryFn: getAuthor,
-  })
+  });
   const {isLoading: isActorLoading, data: actorData, error: actorError} = useQuery({
     queryKey: ['actors'],
     queryFn: getActor,
-  })
+  });
   const {isLoading: isGenreLoading, data: genreData, error: genreError} = useQuery({
     queryKey: ['genres'],
     queryFn: getGenre,
-  })
-  const settings = {
-    // dots: true,
-    // infinite: true,
-    // speed: 500,
-    // slidesToShow: 1,
-    // slidesToScroll: 1
-
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3, // Adjust this based on the number of images you want visible at once
-    slidesToScroll: 1, // Number of slides to scroll at once
-    // arrows: true, // Show next/prev arrows
-    centerMode: false, // Do not center the active slide
-  };
+  });
+ 
   const [watchlist, setWatchlist] = useState({});
   const [newMonth, setNewMonth] = useState('');
   const [newMovie, setNewMovie] = useState('');
 
-  const addToWatchlist = (month, movie) => {
-    setWatchlist((prevWatchlist) => ({
-      ...prevWatchlist,
-      [month]: prevWatchlist[month]
-        ? [...prevWatchlist[month], movie]
-        : [movie],
-    }));
-  };
+  // const addToWatchlist = (month, movie) => {
+  //   setWatchlist((prevWatchlist) => ({
+  //     ...prevWatchlist,
+  //     [month]: prevWatchlist[month]
+  //       ? [...prevWatchlist[month], movie]
+  //       : [movie],
+  //   }));
+  // };
 
-  const handleAddToWatchlist = () => {
-   return console.log(selectedMonth);
-    console.log(newMonth);
-    if (newMonth.trim() === '' || newMovie.trim() === '') return;
+  const handleAddToWatchlist = (movieId) => {
+    console.log("woo");
+    const payload = {
+      user_id: 1,
+      show_id: movieId,
+      month:selectedMonth,
+      year:new Date().getFullYear()
+    };
+    addToWatchlist(payload);
+    // console.log(newMonth);
+    // if (newMonth.trim() === '' || newMovie.trim() === '') return;
 
-    setMoviesByMonth((prevMovies) => ({
-      ...prevMovies,
-      [newMonth]: [newMovie],
-    }));
+    // setMoviesByMonth((prevMovies) => ({
+    //   ...prevMovies,
+    //   [newMonth]: [newMovie],
+    // }));
 
-    addToWatchlist(newMonth, newMovie); // Optional: Add the movie to the watchlist
-    setNewMonth(''); // Clear the month input field
-    setNewMovie(''); // Clear the movie input field
-    console.log(watchlist);
+    // addToWatchlist(newMonth, newMovie); // Optional: Add the movie to the watchlist
+    // setNewMonth(''); // Clear the month input field
+    // setNewMovie(''); // Clear the movie input field
+    // console.log(watchlist);
   };
 
 
@@ -316,10 +333,11 @@ const Watchlist = () => {
             style={{ backgroundColor: movie.isSelected ? '#1a4b6f' : 'inherit' }} // Example to change background color if selected
           >
             <td>{movie.title}</td>
-            <td>{movie.actors.map(actor => actor.name).join(', ')}</td>
+            <td>{movie.actors.map(actor => actor.name).join(', ')  || 'N/A'}</td>
             <td>{movie.genre ? movie.genre.name : 'N/A'}</td>
             <td>{movie.author ? movie.author.name : 'N/A'}</td>
             <td>{movie.inWatchlist ? 'Yes' : 'No'}</td>
+
           </tr>
         ))}
               </tbody>
@@ -379,7 +397,8 @@ const Watchlist = () => {
             >
               Add to watchlist
             </button>
-             <Modal 
+            {pickedMovie && (
+               <Modal 
              size='xs'
         isOpen={isOpen} 
         onOpenChange={onOpenChange} 
@@ -387,7 +406,19 @@ const Watchlist = () => {
         style={{width:'20%',background:'transparent', color:'white'}}
       >
         <ModalContent>
-          {(onClose) => (
+        <ModalHeader className="flex flex-col gap-1">Select Month</ModalHeader>
+              <ModalBody>
+              {moviesByMonth.map((month) => (
+              <Button style={{background:selectedMonth === month ? 'teal' : 'white', color: 'black'}} color="danger" variant="light"  value="1" label="b" onPress={() => setSelectedMonth(selectedMonth === month ? null : month)}> {month}</Button>
+              ))}
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" variant="light" onClick={() => handleAddToWatchlist(pickedMovie.id)}>
+                  Add
+                </Button>
+              
+              </ModalFooter>
+          {/* {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Select Month</ModalHeader>
               <ModalBody>
@@ -396,14 +427,15 @@ const Watchlist = () => {
               ))}
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" variant="light" onPress={() => handleAddToWatchlist}>
+                <Button color="primary" variant="light" onClick={() => handleAddToWatchlist}>
                   Add
                 </Button>
               </ModalFooter>
             </>
-          )}
+          )} */}
         </ModalContent>
       </Modal>
+      )}
           </div>
 
 
