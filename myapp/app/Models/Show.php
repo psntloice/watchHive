@@ -11,11 +11,14 @@ class Show extends Model
     protected $fillable = [
         'title', 'type', 'genre_id', 'author_id', 'first_release_date', 'next_release_date', 'sequel_id', 'picture_url', 'is_upcoming', 'has_sequel',
     ];
-
-    public function genre()
+    public function genres()
     {
-        return $this->belongsTo(Genre::class);
+        return $this->belongsToMany(Genre::class);
     }
+    // public function genre()
+    // {
+    //     return $this->belongsTo(Genre::class);
+    // }
 
     public function author()
     {

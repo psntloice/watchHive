@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('type');
-        $table->foreignId('genre_id');
         $table->foreignId('author_id');
-        // $table->foreignId('actor_id');
         $table->string('picture_url')->nullable();
         $table->date('first_release_date')->nullable(); // Add first release date
         $table->date('next_release_date')->nullable(); // Add next release date
@@ -26,8 +24,8 @@ return new class extends Migration
         $table->boolean('is_upcoming')->default(false);
             $table->timestamps();
 
-            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
-            // $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
+            // $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
+            // // $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
             $table->foreign('sequel_id')->references('id')->on('shows')->onDelete('set null');            
         });

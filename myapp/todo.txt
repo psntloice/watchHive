@@ -26,3 +26,5 @@ make favourites in db to be unique and may instead add strenght of the favourite
 
 
 on favourites add the if for just incase its not working
+
+make the carousels to show movie from the latest

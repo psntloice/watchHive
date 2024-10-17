@@ -11,7 +11,11 @@ class Genre extends Model
     protected $fillable = [
         'name',
     ];
-    public function shows() {
-        return $this->hasMany(Show::class);
-    }
+    // public function shows() {
+    //     return $this->hasMany(Show::class);
+    // }
+    public function shows()
+{
+    return $this->belongsToMany(Show::class, 'show_genre');
+}
 }

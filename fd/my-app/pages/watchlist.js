@@ -220,9 +220,31 @@ const Watchlist = () => {
     setIsActive((prev) => !prev);
 
   };
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   if (isMovieLoading || isAuthorLoading || isActorLoading || isGenreLoading) return 'Loading...'
   if (movieError || authorError || actorError ||  genreError) return 'An error has occurred: ' +  (movieError?.message || authorError?.message || actorError?.message || genreError?.message)
- 
+    const filteredMovies = movieData.filter((movie) => {
+      // Convert movie.genre to a string if it's an array
+      const movieGenre = Array.isArray(movie.genre) ? movie.genre.join(', ') : movie.genre;
+    
+      // Ensure movieGenre is a string before calling toLowerCase
+      const genreString = typeof movieGenre === 'string' ? movieGenre.toLowerCase() : '';
+      // Check if name, genre, or any actor matches the search query
+      return (
+        // console.log(movieGenre)
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        movie.author.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        movie.genre.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+        // genreString.includes(searchQuery.toLowerCase()) 
+        // ||
+        // movie.actors.some(actor => actor.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    });
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '6px' }}>
 
@@ -302,11 +324,54 @@ const Watchlist = () => {
                       </SelectItem>
                     ))}
             </Select>
-            <Input className="h-2 w-1/6" label="name" onClear={() => console.log("input cleared")} />
+            <Input className="h-2 w-1/6" value={searchQuery}
+            onChange={handleSearchChange} label="name" onClear={() => console.log("input cleared")} />
 
           </div>
-
+          {filteredMovies.length > 0 ? (
+      
           <div style={{ flex: '1' }} className="p-px ">
+          <table class=" max-w-max table-auto border-separate border-spacing-2 " style={{
+            padding: '10px',
+            cursor: 'pointer',
+            width: '100%',
+            textAlign: 'centre',
+            borderRadius: '8px',
+            backgroundColor: '#132b4a',
+          }}>
+            <thead class="opacity-90">
+              <tr>
+                <th >Movie</th>
+                <th>Actor</th>
+                <th>Genre</th>
+                <th>Author</th>
+                <th>Inwatchlist</th>
+              </tr>
+            </thead>
+            <tbody>
+            {filteredMovies.map((movie) => (
+        <tr
+          key={movie.id}
+          onClick={() => handleRowClick(movie)}
+          className="opacity-70 py-0.5 px-2 tracking-wide hover:ring-2"
+          style={{ backgroundColor: movie.isSelected ? '#1a4b6f' : 'inherit' }} // Example to change background color if selected
+        >
+          <td>{movie.title}</td>
+          <td>{movie.actors.map(actor => actor.name).join(', ')  || 'N/A'}</td>
+          <td>{movie.genre ? movie.genre.name : 'N/A'}</td>
+          <td>{movie.author ? movie.author.name : 'N/A'}</td>
+          <td>{movie.inWatchlist ? 'Yes' : 'No'}</td>
+
+        </tr>
+      ))}
+            </tbody>
+          </table>
+
+        </div>
+      ) : (
+        <p>No movies found</p>
+      )}
+          {/* <div style={{ flex: '1' }} className="p-px ">
             <table class=" max-w-max table-auto border-separate border-spacing-2 " style={{
               padding: '10px',
               cursor: 'pointer',
@@ -343,7 +408,7 @@ const Watchlist = () => {
               </tbody>
             </table>
 
-          </div>
+          </div> */}
 
         </div>
 

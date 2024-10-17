@@ -49,7 +49,7 @@ class ShowController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
-'genre_id' => 'required|array', // Accept an array of genre IDs
+// 'genre_id' => 'required|array', // Accept an array of genre IDs
 // 'genre_id.*' => 'exists:genres,id',
                 // 'actor_id' => 'nullable|array', // Allow an array of actor IDs
                 // 'actor_id.*' => 'exists:actors,id',                 
@@ -89,7 +89,7 @@ class ShowController extends Controller
             $show = Show::create([
                 'title' => $validatedData['title'],
                 'type' => $validatedData['type'],
-                'genre_id' => $validatedData['genre_id'],
+                // 'genre_id' => $validatedData['genre_id'],
                 'author_id' => $validatedData['author_id'],
                 // 'picture_url' => $validatedData['picture_url'],
                

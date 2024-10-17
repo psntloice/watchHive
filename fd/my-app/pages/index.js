@@ -147,7 +147,7 @@
 
 
 // pages/index.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Index.module.css';
 import Slider from "react-slick";
@@ -175,10 +175,20 @@ const Home = () => {
     queryKey: ['favs'],
     queryFn: getFavourites,
   });
-  // const getMovie = async () => {
-  //   if (favData.show_id===movieData.id) return console.log("hushsbh");
-  // }
-  // console.log(favData.);
+  const removeFromFavourites = async (id) => {
+    try {
+      const data = await delete_call_module("favourites",id);
+      setIsActive((prev) => !prev);
+
+      // refetch();
+      console.log(id); // Log the authors data
+
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error deleting authors:', error);
+    }
+  };
   const getMovie = async () => {
     try {
       const data = await get_call_module("shows")
@@ -192,7 +202,6 @@ const Home = () => {
     queryKey: ['movies'],
     queryFn: getMovie,
   })
-  console.log(movieData);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const settings = {
     // dots: true,
@@ -218,7 +227,6 @@ const Home = () => {
       setSelectedMovie(movie);
     }        console.log("hurraaay");
   };
-  console.log(lastAddedMovie);
   const addToFavourites = async (payload) => {
     try {
       const data = await post_call_module(payload,"favourites");
@@ -235,18 +243,25 @@ const Home = () => {
       user_id: 1,
       show_id: id,
     };
-    // addToFavourites(payload);
+    addToFavourites(payload);
     setIsActive((prev) => !prev);
 
   };
-  // let isFavorite = false;
-//   if (favData.id === selectedMovie.id) {
-//     console.log("hushsbh");
-//     isFavorite = true; // You can use this flag to show something different in the JSX if needed
-// }
-  if (isMovieLoading) return 'Loading...'
-  if ( movieError) return 'An error has occurred: ' +  (movieError?.message)
 
+  // useEffect(() => {
+  //   // if (favData.length = 0) return ;
+  //   // if (selectedMovie.length = 0) return;
+  //   // Check if the selectedMovie is in favData
+  //   if (favData.some((fav) => fav.show_id === selectedMovie.id)) {
+  //     setIsActive(true);
+  //   } else {
+  //     setIsActive(false);
+  //   }
+  // }, [favData, selectedMovie]);
+
+  if (isMovieLoading) return 'Loading...';
+  if ( movieError) return 'An error has occurred: ' +  (movieError?.message);
+    selectedMovie?'':setSelectedMovie(lastAddedMovie);
   return (
     <div style={{ display: 'flex', flexDirection:'column', gap: '16px', minHeight:'95vh' }}>
   <Head>
@@ -258,7 +273,7 @@ const Home = () => {
   <div style={{
     flex: '2',
     position: 'relative', // Relative to position the slider correctly
-    background: `url(${baseUrl}/storage/${selectedMovie.picture_url})`,
+    background: selectedMovie ?  `url(${baseUrl}/storage/${selectedMovie.picture_url})`: 'none',
     backgroundRepeat: 'no-repeat',
     height: '95vh',
     color: '#fff',
@@ -279,6 +294,7 @@ const Home = () => {
         alignItems: 'center',
         justifyContent: 'left',
       }}>
+        {selectedMovie && (
         <div style={{
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           color: '#fff',
@@ -287,6 +303,7 @@ const Home = () => {
           maxWidth: '80%',
           textAlign: 'center',
         }}>
+          
           <p> Written By: {selectedMovie.author.name}</p>
                        <p>  Genre: {selectedMovie.genre.name}</p>
                        {/* <p>  Actors: {movie.actor.name}</p> */}
@@ -298,13 +315,13 @@ const Home = () => {
                        very detailed explanation
                        <p> actors: {selectedMovie.next_release_date}</p>
                            
-                       <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} 
+                       <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} onClick={() => (isActive ? handleFavourites(selectedMovie.id): removeFromFavourites(selectedMovie.id))}
                       //  onClick={() => handleFavourites(pickedMovie.id)}
                        >     
-                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isFavourite ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isActive ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg> add to favorites
-</button>      </div>
+</button>     </div> )}
       </div>
       
     </div>
