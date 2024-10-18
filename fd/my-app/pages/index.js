@@ -260,6 +260,7 @@ const Home = () => {
   // }, [favData, selectedMovie]);
 
   if (isMovieLoading) return 'Loading...';
+  console.log(movieData);
   if ( movieError) return 'An error has occurred: ' +  (movieError?.message);
     selectedMovie?'':setSelectedMovie(lastAddedMovie);
   return (
@@ -305,15 +306,16 @@ const Home = () => {
         }}>
           
           <p> Written By: {selectedMovie.author.name}</p>
-                       <p>  Genre: {selectedMovie.genre.name}</p>
-                       {/* <p>  Actors: {movie.actor.name}</p> */}
+                       <p>  Genre: {selectedMovie?.genres?.map((genre) => genre.name).join(", ")}</p>
                        <p> First release: {selectedMovie.first_release_date}</p>
                        <p> Next release: {selectedMovie.next_release_date}</p>
                        <p> Sequel: {selectedMovie.next_release_date}</p>
+
                        <p> Talks of this and that</p>
 
                        very detailed explanation
-                       <p> actors: {selectedMovie.next_release_date}</p>
+                       <p>  Actors: {selectedMovie?.actors?.map((actor) => actor.name).join(", ")}</p>
+
                            
                        <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} onClick={() => (isActive ? handleFavourites(selectedMovie.id): removeFromFavourites(selectedMovie.id))}
                       //  onClick={() => handleFavourites(pickedMovie.id)}

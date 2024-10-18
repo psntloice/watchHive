@@ -17,3 +17,4 @@ Route::apiResource('genres', GenreController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('favourites', FavouritesController::class);
 Route::apiResource('watchlists', WatchlistController::class);
+Route::get('releases', [ShowController::class, 'releases']);

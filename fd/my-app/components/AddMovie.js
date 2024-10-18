@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Input } from "@nextui-org/input";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, colorVariants } from "@nextui-org/react";
 import { DatePicker } from "@nextui-org/date-picker";
@@ -178,14 +178,30 @@ const ActorForm = () => {
     queryKey: ['genres'],
     queryFn: getGenre,
   })
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleAddMovie = async (e) => {
+    e.preventDefault(); 
+    console.log ("yofdhlij");
+    // e.preventDefault();
+    const payload = {
+      title: 'dfd',
+    type: 'movie' ,
+    genre_id: 9,
+    author_id: 1,
+    actor_id: 1,
+    // sequel_id: '',
+    has_sequel: 0,
+    // picture_url: '',
+    is_upcoming: 1,
+    first_release_date: '2024-01-05',
+    next_release_date: '2024-01-05',     
+    };
+  await  console.log(payload);
+//     const booleanValue = selectedValue === "true";
+// console.log(newmovieData);
 
-    const booleanValue = selectedValue === "true";
-console.log(newmovieData);
-    await addMovie(newmovieData);
-    // setNewMovie({ name: '', description: '' });
-    refetch();
+//     await addMovie(newmovieData);
+//     // setNewMovie({ name: '', description: '' });
+//     refetch();
     
   };
   const handleReSubmit = async (e, tid) => {
@@ -218,15 +234,25 @@ console.log(newmovieData);
     setIsActive((prev) => !prev);
 
   };
-  if (isAuthorLoading || isActorLoading || isGenreLoading) return 'Loading...'
-  if ( authorError || actorError ||  genreError) return 'An error has occurred: ' +  (authorError?.message || actorError?.message || genreError?.message)
+  if (isAuthorLoading || isActorLoading || isGenreLoading || isMovieLoading) return 'Loading...'
+  if ( authorError || actorError ||  genreError || movieError) return 'An error has occurred: ' +  (authorError?.message || actorError?.message || genreError?.message || movieError?.message)
   return (
 
     <div className={styles.formdiv}>
       <h3 className="text-default-500 text-small">movies</h3>
 
       <div style={{ flex: '1', width: '96vw', display: 'flex', gap: '2.5em', flexDirection: 'row' }} >
-        <form onSubmit={handleSubmit} style={{ flex: '1', width: '96vw', height: '100%', display: 'flex', columnGap: '1em', flexDirection: 'column' }} className='flex flex-row w-4/5'>
+      <form onSubmit={handleAddMovie} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <label htmlFor="title">Movie Title:</label>
+            <input
+                type="text"
+                id="title"
+                required
+                placeholder="Enter movie title"
+            />
+            <button type="submit">Add Movie</button>
+        </form>
+        <form onSubmit={handleAddMovie} style={{ flex: '1', width: '96vw', height: '100%', display: 'flex', columnGap: '1em', flexDirection: 'column' }} className='flex flex-row w-4/5'>
 
           <div style={{ width: '100%', flex: '1', display: 'flex', gap: '10%', flexDirection: 'row', justifyContent: 'space-around' }} className='flex flex-row w-4/5'>
             <div className="flex flex-col gap-4 w-5/12 ">
@@ -470,13 +496,13 @@ console.log(newmovieData);
                         }}>
                         
                        <p> Written By: {movie.author.name}</p>
-                       <p>  Genre: {movie.genre.name}</p>
+                       <p>  Genre: {movie?.genres?.map((genre) => genre.name).join(", ")}</p>
                        {/* <p>  Actors: {movie.actor.name}</p> */}
                        <p> First release: {movie.first_release_date}</p>
                        <p> Next release: {movie.next_release_date}</p>
                        <p> Sequel: {movie.next_release_date}</p>
                        <p> Talks of this and that</p>
-                       <p> actors: {movie.next_release_date}</p>
+                       <p>  Actors: {movie?.actors?.map((actor) => actor.name).join(", ")}</p>
                        
               
                        <div>

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Show;
+use App\Models\Actor;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Exception;
 use Illuminate\Support\Facades\Log;
 use function Laravel\Prompts\error;
+use Carbon\Carbon;
 
 class ShowController extends Controller
 {
@@ -24,18 +27,22 @@ class ShowController extends Controller
         // return response()->json($movies);
     // return Show::all();
     // error(Show::with('genre')->get());
-    $movies = Show::with('genre')->get();
+    $movies = Show::with('genres')->get();
     
     // Log the movies for debugging (optional)
     Log::info($movies);
 
     // Make sure to return the response
-    return Show::with(['genre', 'actors', 'author'])->get();
+    return Show::with(['genres', 'actors', 'author'])->get();
 
     return response()->json($movies);
 
     }
-
+    public function releases()
+    {
+    //   return  Log::info(Carbon::today());
+        return   Show::whereDate('first_release_date', '>', Carbon::today())->with(['genres', 'actors', 'author'])->get();
+    }
     public function show($id)
     {
         return Show::findOrFail($id);
@@ -43,23 +50,40 @@ class ShowController extends Controller
 
     public function store(Request $request)
     {
-           
         try {
+ 
+    // Check if a student already exists, or create a new one
+//     $student = Genre::firstOrCreate([
+//         'name' => 'Action', // You can specify a particular name here or pass it as a parameter
+//         // 'last_name' => 'Doe',   // Adjust these fields as needed
+//     ]
+//     // , [        'address' => fake()->address(), // Only set the address if creating a new student
+//     // ]
+// );
+
+    // Attach the subjects to the student, ensuring no duplicate associations
+    // $student->subjects()->syncWithoutDetaching([$english->id, $maths->id, $science->id]);
+
+    // return "Data stored";
+
+
+
+
             // Step 1: Validate the request
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
-// 'genre_id' => 'required|array', // Accept an array of genre IDs
-// 'genre_id.*' => 'exists:genres,id',
+// 'genre_id' => 'required|array', 
+'genre_id.*' => 'exists:genres,id',
                 // 'actor_id' => 'nullable|array', // Allow an array of actor IDs
-                // 'actor_id.*' => 'exists:actors,id',                 
+                'actor_id.*' => 'exists:actors,id',                 
                 // 'actor_id' => 'required|exists:actors,id',
                 'author_id' => 'required|exists:authors,id',
-                'first_release_date' => 'nullable|date',
-                'next_release_date' => 'nullable|date',
+                'first_release_date' => 'required|date_format:Y-m-d',
+                'next_release_date' => 'nullable|date_format:Y-m-d',
                 'sequel_id' => 'nullable|exists:shows,id',
-                // 'has_sequel' => 'boolean',
-                // 'is_upcoming' => 'boolean',
+                'has_sequel' => 'boolean',
+                'is_upcoming' => 'boolean',
                 // 'picture_url' => 'image|max:2048'
             ]);
     
@@ -89,7 +113,9 @@ class ShowController extends Controller
             $show = Show::create([
                 'title' => $validatedData['title'],
                 'type' => $validatedData['type'],
-                // 'genre_id' => $validatedData['genre_id'],
+                'first_release_date' => $validatedData['first_release_date'],
+                'next_release_date' => $validatedData['next_release_date'],
+
                 'author_id' => $validatedData['author_id'],
                 // 'picture_url' => $validatedData['picture_url'],
                
@@ -102,6 +128,23 @@ class ShowController extends Controller
             // $show = Show::create($validatedData);
     
             if ($show) {
+
+                $genres = $validatedData['genre_id'];
+                $genreIds = [];
+                foreach ($genres as $id) {
+                    $genre = Genre::firstOrCreate(['id' => $id]);
+                    $genreIds[] = $genre->id;
+                }
+                $show->genres()->syncWithoutDetaching($genreIds);
+
+                $actors = $validatedData['actor_id'];
+                $actorIds = [];
+                foreach ($actors as $id) {
+                    $actor = Actor::firstOrCreate(['id' => $id]);
+                    $actorIds[] = $actor->id;
+                }
+                $show->actors()->syncWithoutDetaching($actorIds);
+
                 // Successfully created the Show
                 error_log("Successfully created the Show: " . json_encode($show));
                 return response()->json($show, 201);

@@ -89,7 +89,7 @@ const MovieForm = ({ onAddMovie, searchQuery}) => {
   
 const filteredMovies = movieData.filter((movie) => {
   // Convert movie.genre to a string if it's an array
-  const movieGenre = Array.isArray(movie.genre) ? movie.genre.join(', ') : movie.genre;
+  const movieGenre = Array.isArray(movie.genres) ? movie.genres.join(', ') : movie.genres;
 
   // Ensure movieGenre is a string before calling toLowerCase
   const genreString = typeof movieGenre === 'string' ? movieGenre.toLowerCase() : '';
@@ -97,8 +97,9 @@ const filteredMovies = movieData.filter((movie) => {
   return (
     // console.log(movieGenre)
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    movie.author.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    movie.genre.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+    movie.author.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+    // ||
+    // movie.genres.name.toLowerCase().includes(searchQuery.toLowerCase()) 
     // genreString.includes(searchQuery.toLowerCase()) 
     // ||
     // movie.actors.some(actor => actor.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -167,13 +168,12 @@ const filteredMovies = movieData.filter((movie) => {
               <ModalBody>
      {modalData?.title}
      <p> Written By: {modalData?.author.name}</p>
-                       <p>  Genre: {modalData?.genre.name}</p>
-                       {/* <p>  Actors: {modalData?.actor.name}</p> */}
+                       <p>  Genre: {modalData?.genres?.map((genre) => genre.name).join(", ")}</p>
                        <p> First release: {modalData?.first_release_date}</p>
                        <p> Next release: {modalData?.next_release_date}</p>
                        <p> Sequel: {modalData?.next_release_date}</p>
                        <p> Talks of this and that</p>
-                       <p> actors: {modalData?.next_release_date}</p>
+                       <p>  Actors: {modalData?.actors?.map((actor) => actor.name).join(", ")}</p>
                          </ModalBody>
               <ModalFooter>
                 {/* <Button color="primary" variant="light" onPress={() => handleAddToWatchlist}>

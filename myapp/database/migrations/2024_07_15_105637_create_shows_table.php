@@ -20,6 +20,7 @@ return new class extends Migration
         $table->date('first_release_date')->nullable(); // Add first release date
         $table->date('next_release_date')->nullable(); // Add next release date
         $table->unsignedBigInteger('sequel_id')->nullable(); // Nullable reference to self
+        $table->text('description');
         $table->boolean('has_sequel')->default(false);
         $table->boolean('is_upcoming')->default(false);
             $table->timestamps();

@@ -185,12 +185,11 @@ author      </label>
      {modalData?.title}
      <p> Written By: {modalData?.show.author.name}</p>
                        <p>  Genre: {modalData?.show.genre.name}</p>
-                       {/* <p>  Actors: {modalData?.actor.name}</p> */}
                        <p> First release: {modalData?.first_release_date}</p>
                        <p> Next release: {modalData?.next_release_date}</p>
                        <p> Sequel: {modalData?.next_release_date}</p>
                        <p> Talks of this and that</p>
-                       <p> actors: {modalData?.next_release_date}</p>
+                       <p>  Actors: {modalData?.actors?.map((actor) => actor.name).join(", ")}</p>
                          </ModalBody>
               <ModalFooter>
                 {/* <Button color="primary" variant="light" onPress={() => handleAddToWatchlist}>

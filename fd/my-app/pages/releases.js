@@ -1,58 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image } from "@nextui-org/image";
 import { Input } from "@nextui-org/input";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
-const Releases = ({ onAddMovie, genres, authors }) => {
-  const [newMovie, setNewMovie] = useState({
-    title: '',
-    type: '',
-    genre_id: '',
-    author_id: '',
-    picture_url: '',
-    first_release_date: '',
-    next_release_date: '',
-    sequel_id: '',
-    has_sequel: false,
-    is_upcoming: false
+const Releases = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  const getReleases = async () => {
+    try {
+      const data = await get_call_module("releases")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching releases:', error);
+    }
+  };
+  const {isLoading: isReleaseLoading, data: releaseData, error: releaseError} = useQuery({
+    queryKey: ['releases'],
+    queryFn: getReleases,
   });
+  // const lastAddedMovie = releaseData && releaseData.length > 0 ? releaseData[releaseData.length - 1] : null;
+  const [selectedMovie, setSelectedMovie] = useState(null);
+    // Fetch the last added movie based on releaseData
+    useEffect(() => {
+      if (releaseData && releaseData.length > 0) {
+          const lastAddedMovie = releaseData[releaseData.length - 1];
+          setSelectedMovie(lastAddedMovie);
+      } else {
+          setSelectedMovie(null); // Reset state if no movie is found
+      }
+  }, [releaseData]);
+  // selectedMovie?'':setSelectedMovie(lastAddedMovie);
+  const [isActive, setIsActive] = useState(false);
+  if (isReleaseLoading) return 'Loading...'
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewMovie(prevState => ({
-      ...prevState,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAddMovie(newMovie);
-    setNewMovie({
-      title: '',
-      type: '',
-      genre_id: '',
-      author_id: '',
-      picture_url: '',
-      first_release_date: '',
-      next_release_date: '',
-      sequel_id: '',
-      has_sequel: false,
-      is_upcoming: false
-    });
-  };
-  const images = [
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    // more images
-  ];
-
+  console.log(releaseData);
+  console.log(selectedMovie);
+  if (releaseError) return 'An error has occurred: ' +  (releaseError?.message)
 
   return (
 
@@ -61,7 +50,7 @@ const Releases = ({ onAddMovie, genres, authors }) => {
       <div style={{
         flex: '1',
         position: 'relative',
-        backgroundImage: `url("https://images.pexels.com/photos/28435066/pexels-photo-28435066/free-photo-of-ancient-lycian-rock-tombs-in-dalyan-turkiye.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")`,
+        backgroundImage: selectedMovie ?  `url(${baseUrl}/storage/${selectedMovie.picture_url})`: 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -83,6 +72,7 @@ const Releases = ({ onAddMovie, genres, authors }) => {
           }}
         />
         {/* Details Section */}
+        {selectedMovie && (
         <div
           style={{
             position: 'relative',
@@ -90,10 +80,26 @@ const Releases = ({ onAddMovie, genres, authors }) => {
             backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background for readability
           }}
         >
-          <h2>Image Details</h2>
-          <p>Some interesting details about the image go here.</p>
+             <p> Written By: {selectedMovie.author.name}</p>
+                       <p>  Genre: {selectedMovie?.genres?.map((genre) => genre.name).join(", ")}</p>
+                       <p> First release: {selectedMovie.first_release_date}</p>
+                       <p> Next release: {selectedMovie.next_release_date}</p>
+                       <p> Sequel: {selectedMovie.next_release_date}</p>
+
+                       <p> Talks of this and that</p>
+
+                       very detailed explanation
+                       <p>  Actors: {selectedMovie?.actors?.map((actor) => actor.name).join(", ")}</p>
+
+                           
+                       <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} onClick={() => (isActive ? handleFavourites(selectedMovie.id): removeFromFavourites(selectedMovie.id))}
+                      //  onClick={() => handleFavourites(pickedMovie.id)}
+                       >     
+                       <svg xmlns="http://www.w3.org/2000/svg" fill= {isActive ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg> add to favorites
+</button>     </div> )}
         </div>
-      </div>
 
       {/* Second Section - 2/3 width */}
       <div
@@ -104,13 +110,13 @@ const Releases = ({ onAddMovie, genres, authors }) => {
           gap: '16px',
         }}
       >
-        {images.map((image, index) => (
-          <div key={index} style={{ overflow: 'hidden', borderRadius: '8px' }}>
+        {releaseData.map((movie) => (
+          <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
             <Image
               width={150}
               height={150}
-              src={image}
-              alt={`Image ${index + 1}`}
+              src={`${baseUrl}/storage/${movie.picture_url}`}
+              // alt={`Image ${index + 1}`}
               style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             />
             <h1>hjv</h1>

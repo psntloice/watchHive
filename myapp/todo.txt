@@ -28,3 +28,11 @@ make favourites in db to be unique and may instead add strenght of the favourite
 on favourites add the if for just incase its not working
 
 make the carousels to show movie from the latest
+
+for those loading and data is not in place it should write data not found
+\
+handle adding the n/a condition so that for cases theres np data for the table it doesnt take the adjacent space
+
+for the dbs make  sure you indicate those that are reuired and if not required give a default value
+
+make sure in releases you show the one thats almost coming

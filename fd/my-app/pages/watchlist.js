@@ -238,8 +238,9 @@ const Watchlist = () => {
       return (
         // console.log(movieGenre)
         movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        movie.author.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        movie.genre.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+        movie.author.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+        // ||
+        // movie.genre.name.toLowerCase().includes(searchQuery.toLowerCase()) 
         // genreString.includes(searchQuery.toLowerCase()) 
         // ||
         // movie.actors.some(actor => actor.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -357,8 +358,8 @@ const Watchlist = () => {
           style={{ backgroundColor: movie.isSelected ? '#1a4b6f' : 'inherit' }} // Example to change background color if selected
         >
           <td>{movie.title}</td>
-          <td>{movie.actors.map(actor => actor.name).join(', ')  || 'N/A'}</td>
-          <td>{movie.genre ? movie.genre.name : 'N/A'}</td>
+          <td>{movie?.actors?.map((actor) => actor.name).join(", ")}</td>
+          <td>{movie?.genres?.map((genre) => genre.name).join(", ")}</td>
           <td>{movie.author ? movie.author.name : 'N/A'}</td>
           <td>{movie.inWatchlist ? 'Yes' : 'No'}</td>
 
@@ -429,7 +430,7 @@ const Watchlist = () => {
               <CardBody>
               <div  style={{ width:'100%', textAlign:'center', fontStyle: 'italic'}}>{pickedMovie.type}</div>
               <p> Written By: {pickedMovie.author.name}</p>
-                       <p>  Genre: {pickedMovie.genre.name}</p>
+                       <p>  Genre: {pickedMovie?.genres?.map((genre) => genre.name).join(", ")}</p>
                        {/* <p>  Actors: {movie.actor.name}</p> */}
                        <p> First release: {pickedMovie.first_release_date}</p>
                        <p> Next release: {pickedMovie.next_release_date}</p>
