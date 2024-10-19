@@ -10,12 +10,14 @@ use App\Http\Controllers\Exception;
 use Illuminate\Support\Facades\Log;
 use function Laravel\Prompts\error;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class ShowController extends Controller
 {
     public function index()
     {
-        
+
         // $movies = Show::all();
 
         // // Loop through each movie to append the image URL
@@ -23,24 +25,23 @@ class ShowController extends Controller
         //     $movie->picture_url = asset('storage/app/public/images' . $movie->image); // Assuming `image` stores the file name
         //     // $movie->picture_url = asset('storage/app/public/images/8CuSte4K3VFBgP3ZN3Ufxc0gccjbjWbVjbAkIbWi.jpg');
         // }
-        
+
         // return response()->json($movies);
-    // return Show::all();
-    // error(Show::with('genre')->get());
-    $movies = Show::with('genres')->get();
-    
-    // Log the movies for debugging (optional)
-    Log::info($movies);
+        // return Show::all();
+        // error(Show::with('genre')->get());
+        $movies = Show::with('genres')->get();
 
-    // Make sure to return the response
-    return Show::with(['genres', 'actors', 'author'])->get();
+        // Log the movies for debugging (optional)
+        Log::info($movies);
 
-    return response()->json($movies);
+        // Make sure to return the response
+        return Show::with(['genres', 'actors', 'author'])->get();
 
+        return response()->json($movies);
     }
     public function releases()
     {
-    //   return  Log::info(Carbon::today());
+        //   return  Log::info(Carbon::today());
         return   Show::whereDate('first_release_date', '>', Carbon::today())->with(['genres', 'actors', 'author'])->get();
     }
     public function show($id)
@@ -51,53 +52,34 @@ class ShowController extends Controller
     public function store(Request $request)
     {
         try {
- 
-    // Check if a student already exists, or create a new one
-//     $student = Genre::firstOrCreate([
-//         'name' => 'Action', // You can specify a particular name here or pass it as a parameter
-//         // 'last_name' => 'Doe',   // Adjust these fields as needed
-//     ]
-//     // , [        'address' => fake()->address(), // Only set the address if creating a new student
-//     // ]
-// );
-
-    // Attach the subjects to the student, ensuring no duplicate associations
-    // $student->subjects()->syncWithoutDetaching([$english->id, $maths->id, $science->id]);
-
-    // return "Data stored";
-
-
-
 
             // Step 1: Validate the request
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
-// 'genre_id' => 'required|array', 
-'genre_id.*' => 'exists:genres,id',
-                // 'actor_id' => 'nullable|array', // Allow an array of actor IDs
-                'actor_id.*' => 'exists:actors,id',                 
-                // 'actor_id' => 'required|exists:actors,id',
+                // 'genre_id.*' => 'exists:genres,id',
+                // 'actor_id.*' => 'exists:actors,id',
                 'author_id' => 'required|exists:authors,id',
                 'first_release_date' => 'required|date_format:Y-m-d',
                 'next_release_date' => 'nullable|date_format:Y-m-d',
                 'sequel_id' => 'nullable|exists:shows,id',
                 'has_sequel' => 'boolean',
                 'is_upcoming' => 'boolean',
+                'description' => 'string',
                 // 'picture_url' => 'image|max:2048'
             ]);
-    
+
             // // Step 2: Handle the image upload
             // if ($request->hasFile('picture_url')) {
             //     $image = $request->file('picture_url');
             //     $imageName = time() . '.' . $image->getClientOriginalExtension();
             //     $imagePath = $image->storeAs('public/images', $imageName);
-                
+
             //     if ($imagePath) {
             //         // Image uploaded successfully
             //         $pictureUrl = 'images/' . $imageName;
             //         error_log("Image uploaded successfully: " . $pictureUrl);
-                    
+
             //         // Add the image path to the validated data
             //         $validatedData['picture_url'] = $pictureUrl;
             //     } else {
@@ -115,62 +97,44 @@ class ShowController extends Controller
                 'type' => $validatedData['type'],
                 'first_release_date' => $validatedData['first_release_date'],
                 'next_release_date' => $validatedData['next_release_date'],
-
+                'description' => $validatedData['description'],             
                 'author_id' => $validatedData['author_id'],
                 // 'picture_url' => $validatedData['picture_url'],
-               
                 'has_sequel' => $validatedData['has_sequel'] ?? false,
                 'is_upcoming' => $validatedData['is_upcoming'] ?? false,
             ]);
-        // Attach actors to the show using the pivot table
-        // $show->actors()->attach($validatedData['actor_id']);
-            // Step 3: Create a new Show record using the validated data
-            // $show = Show::create($validatedData);
-    
-            if ($show) {
+        
+            // if ($show) {
+            //     $genres = $validatedData['genre_id'];
+            //     $genreIds = [];
+            //     foreach ($genres as $id) {
+            //         $genre = Genre::firstOrCreate(['id' => $id]);
+            //         $genreIds[] = $genre->id;
+            //     }
+            //     $show->genres()->syncWithoutDetaching($genreIds);
 
-                $genres = $validatedData['genre_id'];
-                $genreIds = [];
-                foreach ($genres as $id) {
-                    $genre = Genre::firstOrCreate(['id' => $id]);
-                    $genreIds[] = $genre->id;
-                }
-                $show->genres()->syncWithoutDetaching($genreIds);
+            //     $actors = $validatedData['actor_id'];
+            //     $actorIds = [];
+            //     foreach ($actors as $id) {
+            //         $actor = Actor::firstOrCreate(['id' => $id]);
+            //         $actorIds[] = $actor->id;
+            //     }
+            //     $show->actors()->syncWithoutDetaching($actorIds);
 
-                $actors = $validatedData['actor_id'];
-                $actorIds = [];
-                foreach ($actors as $id) {
-                    $actor = Actor::firstOrCreate(['id' => $id]);
-                    $actorIds[] = $actor->id;
-                }
-                $show->actors()->syncWithoutDetaching($actorIds);
-
-                // Successfully created the Show
-                error_log("Successfully created the Show: " . json_encode($show));
-                return response()->json($show, 201);
-            } else {
-                // Failed to create the Show
-                error_log("Failed to create the Show.");
-                return response()->json(['error' => 'Failed to create the Show.'], 500);
-            }
+            //     // Successfully created the Show
+            //     error_log("Successfully created the Show: " . json_encode($show));
+            //     return response()->json($show, 201);
+            // } else {
+            //     // Failed to create the Show
+            //     error_log("Failed to create the Show.");
+            //     return response()->json(['error' => 'Failed to create the Show.'], 500);
+            // }
         } catch (\Exception $e) {
             // Catch any unexpected exceptions
             error_log("Exception occurred: " . $e->getMessage());
             return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
-      
-        // $image = $request->file('picture_url');
-        // $imageName = time() . '.' . $image->getClientOriginalExtension();
-        // $image->storeAs('public/images', $imageName);
-        // // // $request->file('picture_url')->store('images', 'public'); 
-   
-        //  return Show::create(['title' => $request->title,
-        //     'type' => $request->type,
-        //     'genre_id' => $request->genre_id,
-        //     'actor_id' => $request->actor_id,
-        //     'author_id' => $request->author_id,
-           
-        //     'picture_url' =>'images/' . $imageName]);
+
     }
 
     public function update(Request $request, $id)

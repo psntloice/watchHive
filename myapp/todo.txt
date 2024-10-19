@@ -36,3 +36,5 @@ handle adding the n/a condition so that for cases theres np data for the table i
 for the dbs make  sure you indicate those that are reuired and if not required give a default value
 
 make sure in releases you show the one thats almost coming
+
+theres just something about when you dont do changes in date it'll pick the date that was previously set check on that

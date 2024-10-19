@@ -9,7 +9,7 @@ class Show extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'type', 'author_id', 'first_release_date', 'next_release_date', 'sequel_id', 'picture_url', 'is_upcoming', 'has_sequel',
+        'title', 'type', 'author_id', 'description','first_release_date', 'next_release_date', 'sequel_id', 'picture_url', 'is_upcoming', 'has_sequel',
     ];
     public function genres()
     {
