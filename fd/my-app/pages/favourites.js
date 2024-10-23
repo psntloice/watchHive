@@ -149,18 +149,24 @@ author      </label>
       gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
       gap: '16px',
     }}>
-         {favData.map((movie) => (
-            <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
-              <Image
-              onClick={() =>handleMOdal(movie)}
-                width={150}
-                height={150}
-                src={`${baseUrl}/storage/${movie.show.picture_url}`}
-                // alt={`Image ${movie.id + 1}`}
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-              />
-            </div>
-          ))}
+        
+        {favData.length > 0 ? (
+        favData.map((movie) => (
+          <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
+            <Image
+            onClick={() =>handleMOdal(movie)}
+              width={150}
+              height={150}
+              src={`${baseUrl}/storage/${movie.show.picture_url}`}
+              // alt={`Image ${movie.id + 1}`}
+              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            />
+          </div>
+        ))
+      ) : (
+        <p>No movies found</p>
+      )}
+         
      
      {/* <Image
     width={300}
@@ -182,14 +188,20 @@ author      </label>
             <>
               <ModalHeader className="flex flex-col gap-1"></ModalHeader>
               <ModalBody>
-     {modalData?.title}
+     {modalData?.show.title}
      <p> Written By: {modalData?.show.author.name}</p>
-                       <p>  Genre: {modalData?.show.genre.name}</p>
-                       <p> First release: {modalData?.first_release_date}</p>
-                       <p> Next release: {modalData?.next_release_date}</p>
-                       <p> Sequel: {modalData?.next_release_date}</p>
-                       <p> Talks of this and that</p>
-                       <p>  Actors: {modalData?.actors?.map((actor) => actor.name).join(", ")}</p>
+                       <p>  Genre: {modalData?.show.genres.name}</p>
+                       <p> First release: {modalData?.show.first_release_date}</p>
+                       <p> Next release: {modalData?.show.next_release_date}</p>
+                       <p> Sequel: {
+   modalData?.show.sequel_id 
+          ? movieData.find(m => m.id === modalData?.show.sequel_id)
+            ? `${movieData.find(m => m.id === modalData?.show.sequel_id).title}`
+            : "No sequel found"
+          : "No sequel"
+  } {modalData?.next_release_date}</p>
+                       <p> {modalData?.show.description}</p>
+                       <p>  Actors: {modalData?.show.actors?.map((actor) => actor.name).join(", ")}</p>
                          </ModalBody>
               <ModalFooter>
                 {/* <Button color="primary" variant="light" onPress={() => handleAddToWatchlist}>

@@ -11,7 +11,7 @@ class FavouritesController extends Controller
     public function index()
     {
        
-        return Favourites::with(['show.genre', 'show.author', 'user'])->get();
+        return Favourites::with(['show.author',  'show.genres', 'user'])->get();
     }
 
     public function show($id)

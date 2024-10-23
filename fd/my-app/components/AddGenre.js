@@ -12,8 +12,8 @@ import { get_call_module, post_call_module, put_call_module, delete_call_module 
 const queryClient = new QueryClient();
 const GenreForm = () => {
   
-  const [newGenre, setNewGenre] = useState({ name: '', description: '' });
-  const [renewGenre, resetNewGenre] = useState({ rename: '', redescription: '' });
+  const [newGenre, setNewGenre] = useState({ name: ''});
+  const [renewGenre, resetNewGenre] = useState({ rename: ''});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,17 +116,7 @@ const GenreForm = () => {
         defaultValue=" "
         className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center"
       />
-      <Input
-        type="text"
-        name="description"
-        value={newGenre.description}
-        onChange={handleChange}
-        required
-        color="primary"
-        placeholder="Enter description"
-        defaultValue=" "
-        className="max-w-[220px] h-2/3 max-h-12 justify-center justify-self-center"
-      />
+     
       <div className="flex w-full" style={{ alignItems: 'center', alignContent: 'center', justifyItems: 'center', justifyContent: 'center' }}>
         <button className="flex justify-self-center max-w-max content-start bg-black" style={{ background: 'black' }} >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-9 bg-transparent">
@@ -138,7 +128,7 @@ const GenreForm = () => {
     </form>
 
     <div className={styles.author} style={{ alignSelf: 'center', overflowY: 'scroll', maxHeight: '89%', background: 'transparent', border: '2px', borderRadius: '15px'}}>
-      {data.map((movie) => (
+    {data.length > 0 ? ( data.map((movie) => (
         <div key={movie.id}   onMouseEnter={() => HoverDiv(movie.id)}
         
           className='flex flex-col justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight: '25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
@@ -205,7 +195,9 @@ const GenreForm = () => {
           </div>
 
         </div>
-      ))}
+      ))  ) : (
+        <p>No genres found</p>
+      )}
 
     </div>
   </div>

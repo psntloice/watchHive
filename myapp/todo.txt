@@ -40,3 +40,9 @@ make sure in releases you show the one thats almost coming
 theres just something about when you dont do changes in date it'll pick the date that was previously set check on that
 
 when data is npt available it wont run because it has none to upload
+
+it is submitting uupon picture upload
+
+handle the sign in both back and front
+
+work on the error replies

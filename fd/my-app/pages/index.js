@@ -160,6 +160,7 @@ import {
   useQuery,
 } from '@tanstack/react-query';
 import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
+import next from 'next';
 
 const Home = () => {
   const getFavourites = async () => {
@@ -261,6 +262,7 @@ const Home = () => {
 
   if (isMovieLoading) return 'Loading...';
   console.log(movieData);
+  // if (movieData.length = 0) return  <p>Please add movies</p>;
   if ( movieError) return 'An error has occurred: ' +  (movieError?.message);
     selectedMovie?'':setSelectedMovie(lastAddedMovie);
   return (
@@ -295,7 +297,7 @@ const Home = () => {
         alignItems: 'center',
         justifyContent: 'left',
       }}>
-        {selectedMovie && (
+      {selectedMovie ? (   selectedMovie && (
         <div style={{
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           color: '#fff',
@@ -309,9 +311,15 @@ const Home = () => {
                        <p>  Genre: {selectedMovie?.genres?.map((genre) => genre.name).join(", ")}</p>
                        <p> First release: {selectedMovie.first_release_date}</p>
                        <p> Next release: {selectedMovie.next_release_date}</p>
-                       <p> Sequel: {selectedMovie.next_release_date}</p>
+                       <p> Sequel: {
+   selectedMovie.sequel_id 
+          ? movieData.find(m => m.id === selectedMovie.sequel_id)
+            ? `${movieData.find(m => m.id === selectedMovie.sequel_id).title}`
+            : "No sequel found"
+          : "No sequel"
+  } </p>
 
-                       <p> Talks of this and that</p>
+                       <p> {selectedMovie.description}</p>
 
                        very detailed explanation
                        <p>  Actors: {selectedMovie?.actors?.map((actor) => actor.name).join(", ")}</p>
@@ -323,7 +331,10 @@ const Home = () => {
                        <svg xmlns="http://www.w3.org/2000/svg" fill= {isActive ? 'red' : 'black'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 </svg> add to favorites
-</button>     </div> )}
+</button>     </div> )
+ ) : (
+  <p>No movie found</p>
+)}
       </div>
       
     </div>
@@ -338,7 +349,7 @@ const Home = () => {
       zIndex: 2, // Ensure it appears above other content
     }}>
       <Slider {...settings}>
-        {movieData.map((movie)=> (
+        {movieData?.map((movie)=> (
           <div key={movie.id} style={{ maxHeight: '187px' }}>
             <img src={`${baseUrl}/storage/${movie.picture_url}`} alt={`Image ${movie.id + 1}`} style={{ width: '100%', maxHeight: '287px', maxWidth: '587px' }}
             onClick={() => handleAddToWatchlist(movie.id, movie)}  />

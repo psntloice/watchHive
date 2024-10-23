@@ -20,10 +20,23 @@ const Releases = () => {
       console.error('Error fetching releases:', error);
     }
   };
+  const getMovie = async () => {
+    try {
+      const data = await get_call_module("shows")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
   const {isLoading: isReleaseLoading, data: releaseData, error: releaseError} = useQuery({
     queryKey: ['releases'],
     queryFn: getReleases,
   });
+  const { isLoading: isMovieLoading, data: movieData, error: movieError, refetch } = useQuery({
+    queryKey: ['movies'],
+    queryFn: getMovie,
+  })
   // const lastAddedMovie = releaseData && releaseData.length > 0 ? releaseData[releaseData.length - 1] : null;
   const [selectedMovie, setSelectedMovie] = useState(null);
     // Fetch the last added movie based on releaseData
@@ -72,6 +85,7 @@ const Releases = () => {
           }}
         />
         {/* Details Section */}
+      
         {selectedMovie && (
         <div
           style={{
@@ -82,11 +96,17 @@ const Releases = () => {
         >
              <p> Written By: {selectedMovie.author.name}</p>
                        <p>  Genre: {selectedMovie?.genres?.map((genre) => genre.name).join(", ")}</p>
-                       <p> First release: {selectedMovie.first_release_date}</p>
+                       <p> Will be released on {selectedMovie.first_release_date}</p>
                        <p> Next release: {selectedMovie.next_release_date}</p>
-                       <p> Sequel: {selectedMovie.next_release_date}</p>
+                       <p> Sequel:  {
+    selectedMovie.sequel_id 
+          ? movieData?.find(m => m.id === selectedMovie.sequel_id)
+            ? `${movieData?.find(m => m.id === selectedMovie.sequel_id).title}`
+            : "No sequel found"
+          : "No sequel"
+  }</p>
 
-                       <p> Talks of this and that</p>
+                       <p> {selectedMovie.description}</p>
 
                        very detailed explanation
                        <p>  Actors: {selectedMovie?.actors?.map((actor) => actor.name).join(", ")}</p>
@@ -110,18 +130,23 @@ const Releases = () => {
           gap: '16px',
         }}
       >
-        {releaseData.map((movie) => (
-          <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
-            <Image
-              width={150}
-              height={150}
-              src={`${baseUrl}/storage/${movie.picture_url}`}
-              // alt={`Image ${index + 1}`}
-              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-            />
-            <h1>hjv</h1>
-          </div>
-        ))}
+         {releaseData.length > 0 ? (
+       releaseData.map((movie) => (
+        <div key={movie.id} style={{ overflow: 'hidden', borderRadius: '8px' }}>
+          <Image
+            width={150}
+            height={150}
+            src={`${baseUrl}/storage/${movie.picture_url}`}
+            // alt={`Image ${index + 1}`}
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          />
+          <h1>hjv</h1>
+        </div>
+      ))
+      ) : (
+        <p>No movies found</p>
+      )}
+        
 
         <Image
           width={300}

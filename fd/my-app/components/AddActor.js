@@ -139,7 +139,7 @@ const ActorForm = () => {
       </form>
 
       <div className={styles.author} style={{ alignSelf: 'center', overflowY: 'scroll', maxHeight: '89%', background: 'transparent', border: '2px', borderRadius: '15px'}}>
-        {data.map((movie) => (
+      {data.length > 0 ? ( data.map((movie) => (
           <div key={movie.id}   onMouseEnter={() => HoverDiv(movie.id)}
           
             className='flex flex-col justify-center content-end tracking-widest text-sm subpixel-antialiased p-px' style={{ minHeight: '25px', marginBottom: '7px', border: '1px solid #ddd', borderRadius: '8px', background: '#E6F1FE', color: '#006FEE' }}>
@@ -206,7 +206,9 @@ const ActorForm = () => {
             </div>
 
           </div>
-        ))}
+        ))) : (
+          <p>No actors found</p>
+        )}
 
       </div>
     </div>

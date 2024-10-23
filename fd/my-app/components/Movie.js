@@ -171,8 +171,14 @@ const filteredMovies = movieData.filter((movie) => {
                        <p>  Genre: {modalData?.genres?.map((genre) => genre.name).join(", ")}</p>
                        <p> First release: {modalData?.first_release_date}</p>
                        <p> Next release: {modalData?.next_release_date}</p>
-                       <p> Sequel: {modalData?.next_release_date}</p>
-                       <p> Talks of this and that</p>
+                       <p> Sequel:{
+   modalData?.sequel_id 
+          ? movieData.find(m => m.id === modalData?.sequel_id)
+            ? `${movieData.find(m => m.id === modalData?.sequel_id).title}`
+            : "No sequel found"
+          : "No sequel"
+  }</p>
+                       <p>{modalData?.description}</p>
                        <p>  Actors: {modalData?.actors?.map((actor) => actor.name).join(", ")}</p>
                          </ModalBody>
               <ModalFooter>

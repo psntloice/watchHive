@@ -104,31 +104,31 @@ class ShowController extends Controller
                 'is_upcoming' => $validatedData['is_upcoming'] ?? false,
             ]);
         
-            if ($show) {
-                $genres = $validatedData['genre_id'];
-                $genreIds = [];
-                foreach ($genres as $id) {
-                    $genre = Genre::firstOrCreate(['id' => $id]);
-                    $genreIds[] = $genre->id;
-                }
-                $show->genres()->syncWithoutDetaching($genreIds);
+            // if ($show) {
+            //     $genres = $validatedData['genre_id'];
+            //     $genreIds = [];
+            //     foreach ($genres as $id) {
+            //         $genre = Genre::firstOrCreate(['id' => $id]);
+            //         $genreIds[] = $genre->id;
+            //     }
+            //     $show->genres()->syncWithoutDetaching($genreIds);
 
-                $actors = $validatedData['actor_id'];
-                $actorIds = [];
-                foreach ($actors as $id) {
-                    $actor = Actor::firstOrCreate(['id' => $id]);
-                    $actorIds[] = $actor->id;
-                }
-                $show->actors()->syncWithoutDetaching($actorIds);
+            //     $actors = $validatedData['actor_id'];
+            //     $actorIds = [];
+            //     foreach ($actors as $id) {
+            //         $actor = Actor::firstOrCreate(['id' => $id]);
+            //         $actorIds[] = $actor->id;
+            //     }
+            //     $show->actors()->syncWithoutDetaching($actorIds);
 
-                // Successfully created the Show
-                error_log("Successfully created the Show: " . json_encode($show));
-                return response()->json($show, 201);
-            } else {
-                // Failed to create the Show
-                error_log("Failed to create the Show.");
-                return response()->json(['error' => 'Failed to create the Show.'], 500);
-            }
+            //     // Successfully created the Show
+            //     error_log("Successfully created the Show: " . json_encode($show));
+            //     return response()->json($show, 201);
+            // } else {
+            //     // Failed to create the Show
+            //     error_log("Failed to create the Show.");
+            //     return response()->json(['error' => 'Failed to create the Show.'], 500);
+            // }
         } catch (\Exception $e) {
             // Catch any unexpected exceptions
             error_log("Exception occurred: " . $e->getMessage());
