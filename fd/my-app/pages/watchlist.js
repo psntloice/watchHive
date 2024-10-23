@@ -151,10 +151,14 @@ const Watchlist = () => {
     // setNewMovie(''); // Clear the movie input field
     // console.log(watchlist);
   };
+  const handlePic = () => {
 
+  console.log("index");
+};
 
   const handleRowClick = (index) => {
-    setPicked(index);
+
+      setPicked(index);
     console.log(index);
   };
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -246,6 +250,7 @@ const Watchlist = () => {
         // movie.actors.some(actor => actor.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     });
+    console.log(movieData.map((m) => m.id === selectedValue.sequel_id).title);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '6px' }}>
 

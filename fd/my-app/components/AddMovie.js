@@ -34,13 +34,13 @@ const ActorForm = () => {
     title: '',
     type: '',
     genre_id: null,
-    author_id: 1,
+    author_id: null,
     actor_id: null,
     sequel_id: null,
     has_sequel:false,
-    description:'aud',
+    description:' ',
     // picture_url: '',
-    // is_upcoming: '',
+    is_upcoming: false,
     first_release_date: null,
     next_release_date: null,
   });
@@ -244,22 +244,14 @@ const ActorForm = () => {
   const myType = ["Movie", "Series"];
   if (isAuthorLoading || isActorLoading || isGenreLoading || isMovieLoading) return 'Loading...'
   if (authorError || actorError || genreError || movieError) return 'An error has occurred: ' + (authorError?.message || actorError?.message || genreError?.message || movieError?.message)
-  return (
+
+    return (
 
     <div className={styles.formdiv}>
       <h3 className="text-default-500 text-small">movies</h3>
 
       <div style={{ flex: '1', width: '96vw', display: 'flex', gap: '2.5em', flexDirection: 'row' }} >
-        <form onSubmit={handleAddMovie} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <label htmlFor="title">Movie Title:</label>
-          <input
-            type="text"
-            id="title"
-            required
-            placeholder="Enter movie title"
-          />
-          <button type="submit">Add Movie</button>
-        </form>
+
         <form onSubmit={handleAddMovie} style={{ flex: '1', width: '96vw', height: '100%', display: 'flex', columnGap: '1em', flexDirection: 'column' }} className='flex flex-row w-4/5'>
 
           <div style={{ width: '100%', flex: '1', display: 'flex', gap: '10%', flexDirection: 'row', justifyContent: 'space-around' }} className='flex flex-row w-4/5'>
@@ -345,7 +337,7 @@ const ActorForm = () => {
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
                     variant='bordered'
                     className="max-w-52 text-blue-500"
-                    onChange={(e) => setMovieData({ ...newmovieData, author_id: e.target.value })}
+                    onChange={(e) => setMovieData({ ...newmovieData, author_id: Number(e.target.value) })}
                   >
                     {authorData.map((author) => (
                       <SelectItem
@@ -363,7 +355,10 @@ const ActorForm = () => {
                     className="max-w-52"
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
-                    onChange={(e) => setMovieData({ ...newmovieData,  genre_id: 1 })}
+                    onChange={(e) =>{ 
+                     const vl = e.target.value;
+                     const numberArray = vl.split(',').map(Number);
+                      setMovieData({ ...newmovieData,  genre_id:numberArray })}}
                   >
                     {genreData.map((genre) => (
                       <SelectItem
@@ -381,7 +376,10 @@ const ActorForm = () => {
                     className="max-w-52"
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
-                    onChange={(e) => setMovieData({ ...newmovieData, actor_id: e.target.value })}
+                    onChange={(e) =>{
+                      const vl = e.target.value;
+                     const numberArray = vl.split(',').map(Number);
+                      setMovieData({ ...newmovieData, actor_id: numberArray })}}
                   >
                     {actorData.map((actor) => (
                       <SelectItem
@@ -423,13 +421,15 @@ const ActorForm = () => {
                     variant='bordered'
                     style={{ borderRadius: '15px', color: '#155e75', background: '#E6F1FE' }}
                     className="max-w-52"
-                    onChange={(e) => setMovieData({ ...newmovieData, sequel_id: e.target.value })}
+                    onChange={(e) => setMovieData({ ...newmovieData, sequel_id: Number(e.target.value)  })}
                   >
                     {movieData.map((movie) => (
                       <SelectItem
                         color="black"
                         style={{ color: '#155e75' }}
-                        key={movie.id}>
+                        key={movie.id}
+                                                  value={movie.id}>
+
                         {movie.title}
                       </SelectItem>
                     ))}
@@ -455,8 +455,12 @@ const ActorForm = () => {
 
 
                 </div>
-                <div>           <Textarea
+                <div>    
+                         <Textarea
                   placeholder="Movie description"
+                  value={newmovieData.description}
+                  onChange={(e) => setMovieData({ ...newmovieData, description: e.target.value })}
+defaultValue=" "
                   style={{ borderRadius: '3px', color: '#155e75', background: '#E6F1FE' }}
                 /></div>
               </div>
@@ -475,7 +479,7 @@ const ActorForm = () => {
                 </UploadDropZone>
                 <UploadPreview
                   fallbackUrl="https://icon-library.net/images/image-placeholder-icon/image-placeholder-icon-6.jpg" />
-                <UploadButton className=' w-3/5 self-center rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500' />
+                <UploadButton onClick={handlePic} className=' w-3/5 self-center rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500' />
               </Uploady>
             </div>
           </div>
@@ -548,8 +552,14 @@ const ActorForm = () => {
                           {/* <p>  Actors: {movie.actor.name}</p> */}
                           <p> First release: {movie.first_release_date}</p>
                           <p> Next release: {movie.next_release_date}</p>
-                          <p> Sequel: {movie.next_release_date}</p>
-                          <p> Talks of this and that</p>
+                          <p>  Sequel: {
+    movie.sequel_id 
+          ? movieData.find(m => m.id === movie.sequel_id)
+            ? `${movieData.find(m => m.id === movie.sequel_id).title}`
+            : "No sequel found"
+          : "No sequel"
+  }</p>
+                          <p> {movie.description}</p>
                           <p>  Actors: {movie?.actors?.map((actor) => actor.name).join(", ")}</p>
 
 
