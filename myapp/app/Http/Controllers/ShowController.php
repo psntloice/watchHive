@@ -52,8 +52,8 @@ class ShowController extends Controller
     public function store(Request $request)
     {
         try {
-
-            // Step 1: Validate the request
+            Log::info('Request Data:', $request->all());
+            // Log::info('Uploaded File:', $request->file('picture_url'));            // Step 1: Validate the request
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
@@ -66,32 +66,32 @@ class ShowController extends Controller
                 'has_sequel' => 'boolean',
                 'is_upcoming' => 'boolean',
                 'description' => 'string',
-                // 'picture_url' => 'image|max:2048'
+                'picture_url' => 'image|max:2048'
             ]);
+// echo  $validatedData;
+            // Step 2: Handle the image upload
+            if ($request->hasFile('picture_url')) {
+                $image = $request->file('picture_url');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('public/images', $imageName);
 
-            // // Step 2: Handle the image upload
-            // if ($request->hasFile('picture_url')) {
-            //     $image = $request->file('picture_url');
-            //     $imageName = time() . '.' . $image->getClientOriginalExtension();
-            //     $imagePath = $image->storeAs('public/images', $imageName);
+                if ($imagePath) {
+                    // Image uploaded successfully
+                    $pictureUrl = 'images/' . $imageName;
+                    error_log("Image uploaded successfully: " . $pictureUrl);
 
-            //     if ($imagePath) {
-            //         // Image uploaded successfully
-            //         $pictureUrl = 'images/' . $imageName;
-            //         error_log("Image uploaded successfully: " . $pictureUrl);
-
-            //         // Add the image path to the validated data
-            //         $validatedData['picture_url'] = $pictureUrl;
-            //     } else {
-            //         // Failed to upload the image
-            //         error_log("Failed to upload the image.");
-            //         return response()->json(['error' => 'Image upload failed.'], 500);
-            //     }
-            // } else {
-            //     // No image uploaded
-            //     error_log("No image uploaded in the request.");
-            //     return response()->json(['error' => 'No image uploaded.'], 400);
-            // }
+                    // Add the image path to the validated data
+                    $validatedData['picture_url'] = $pictureUrl;
+                } else {
+                    // Failed to upload the image
+                    error_log("Failed to upload the image.");
+                    return response()->json(['error' => 'Image upload failed.'], 500);
+                }
+            } else {
+                // No image uploaded
+                error_log("No image uploaded in the request.");
+                return response()->json(['error' => 'No image uploaded.'], 400);
+            }
             $show = Show::create([
                 'title' => $validatedData['title'],
                 'type' => $validatedData['type'],
@@ -99,8 +99,7 @@ class ShowController extends Controller
                 'next_release_date' => $validatedData['next_release_date'],
                 'description' => $validatedData['description'],             
                 'author_id' => $validatedData['author_id'],
-                'sequel_id' => $validatedData['sequel_id']?? null,
-                // 'picture_url' => $validatedData['picture_url'],
+                'picture_url' => $validatedData['picture_url'],
                 'has_sequel' => $validatedData['has_sequel'] ?? false,
                 'is_upcoming' => $validatedData['is_upcoming'] ?? false,
             ]);

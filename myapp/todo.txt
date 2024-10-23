@@ -38,3 +38,5 @@ for the dbs make  sure you indicate those that are reuired and if not required g
 make sure in releases you show the one thats almost coming
 
 theres just something about when you dont do changes in date it'll pick the date that was previously set check on that
+
+when data is npt available it wont run because it has none to upload

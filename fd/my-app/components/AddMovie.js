@@ -1,10 +1,10 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Input } from "@nextui-org/input";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, colorVariants } from "@nextui-org/react";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 import { css } from '@nextui-org/react';
-import Uploady from '@rpldy/uploady';
+import Uploady, {useItemFinishListener, useBatchAddListener} from '@rpldy/uploady';
 import UploadButton from "@rpldy/upload-button";
 import UploadPreview from "@rpldy/upload-preview";
 import styles from '../styles/addmovie.module.css';
@@ -25,7 +25,84 @@ import {
 import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
 const queryClient = new QueryClient();
+const UploadComponent = ({ onFilesUploaded }) => {
+  const [files, setFiles] = useState([]);
+  const [finished, setFinished] = useState([]);
+
+  // Hook to listen for new files added
+  useBatchAddListener((batch) => {
+    setFiles((prevFiles) => [...prevFiles, ...batch.items.map(item => item.file)]);
+  });
+
+  // Hook to listen for finished uploads
+  useItemFinishListener((item) => {
+    console.log("File upload finished:", item); // Log the uploaded item
+ 
+    setFinished((finished) =>
+      finished.concat(`${item.file.name} (${item.file.size} bytes)`));
+    console.log(finished);
+  });
+   // Log finished uploads when they are updated
+   useEffect(() => {
+    console.log("Finished uploads:", finished);
+  }, [finished]);
+
+
+  const handleFileUpload = async () => {
+    try {
+      for (let file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+
+      }
+      const uploadFiless = finished.map((name) => ({
+        name // Just passing the finished upload names; you can modify based on your needs
+      }));
+      console.log(files);
+      console.log(uploadFiless);
+      const uploadFiles = files.map((file) => {
+        return {
+            file: file, // Send the uploaded file along with other data
+            name: file.name // Include file name
+        };
+    });
+      // Call the callback function with the uploaded files
+      if (onFilesUploaded) {
+        onFilesUploaded(uploadFiles);
+      }
+    // return  console.log(uploadFiles);
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
+
+  return (
+    <div>
+      <button className=' w-4/5 h-2/3 self-center rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500' onClick={handleFileUpload} disabled={!files.length}>
+Submit      </button>
+<ul>
+        {finished.map((name, index) => (
+          <li key={index}>{name} gvhtry</li>
+        ))}
+      </ul>
+     
+    </div>
+  );
+};
 const ActorForm = () => {
+  const handleFilesUploaded = (files) => {
+    console.log('My Uploaded files:', files);
+    if (files.length > 0) {
+      setMovieData((prevData) => ({
+        ...prevData,
+        picture_url: files[0].file, // Store the first selected file
+      }));
+    }
+    // setMovieData({ ...newmovieData, picture_url: 
+    //   files[0].file })
+    // Here, you can handle the uploaded files as needed
+  };
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [imageUrl, setImageUrl] = useState(null);
   const [thedate, setDate] = useState(null);
@@ -38,9 +115,9 @@ const ActorForm = () => {
     actor_id: null,
     sequel_id: null,
     has_sequel:false,
-    description:' ',
-    // picture_url: '',
-    is_upcoming: false,
+    description:'aud',
+    picture_url: null,
+    // is_upcoming: '',
     first_release_date: null,
     next_release_date: null,
   });
@@ -84,10 +161,10 @@ const ActorForm = () => {
   };
 
 
-  const Uploady = dynamic(() => import('@rpldy/uploady'), { ssr: false });
-  const UploadDropZone = dynamic(() => import('@rpldy/upload-drop-zone'), { ssr: false });
-  const UploadPreview = dynamic(() => import('@rpldy/upload-preview'), { ssr: false });
-  const UploadButton = dynamic(() => import('@rpldy/upload-button'), { ssr: false });
+  // const Uploady = dynamic(() => import('@rpldy/uploady'), { ssr: false });
+  // const UploadDropZone = dynamic(() => import('@rpldy/upload-drop-zone'), { ssr: false });
+  // const UploadPreview = dynamic(() => import('@rpldy/upload-preview'), { ssr: false });
+  // const UploadButton = dynamic(() => import('@rpldy/upload-button'), { ssr: false });
   const [selectedValue, setSelectedValue] = useState("true");  // default to string "true"
 
   const handleSelectChange = (e) => {
@@ -204,7 +281,44 @@ const ActorForm = () => {
     //     const booleanValue = selectedValue === "true";
     // console.log(newmovieData);
 
-        await addMovie(newmovieData);
+
+    const formData = new FormData();
+    
+  // Append movie data
+for (const key in newmovieData) {
+  const value = newmovieData[key];
+  
+  // Handle null values
+  if (value === null) {
+    formData.append(key, ''); // Send as an empty string for null
+  } else {
+    formData.append(key, value); // Append the value directly
+  }
+
+  // Debugging: log the value and the current state of FormData
+  console.log(`${key}:`, value);
+}
+
+      // Log the FormData contents
+  for (const pair of formData.entries()) {
+    console.log(`${pair[0]}: ${pair[1]}`);
+  }
+
+  const response = await fetch('http://localhost:8000/api/shows', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  // if (!response.ok) {
+  //   throw new Error('Network response was not ok');
+  // }
+
+  const data = await response.json();
+  console.log(data); 
+
+        // await addMovie(formData);
     //     // setNewMovie({ name: '', description: '' });
     //     refetch();
 
@@ -468,6 +582,10 @@ defaultValue=" "
             </div>
             <div className="flex flex-col gap-4 w-2/5 h-full bg-sky-500 border-y-4 border border-blue-700 rounded-3xl">
               <Uploady destination={{ url: "http://localhost:8000/shows" }}>
+              {/* <Uploady
+      multiple
+      autoUpload={false} // Prevents automatic upload
+    > */}
                 <UploadDropZone
                   onDragOverClassName="drag-over"
                   grouped
@@ -479,7 +597,11 @@ defaultValue=" "
                 </UploadDropZone>
                 <UploadPreview
                   fallbackUrl="https://icon-library.net/images/image-placeholder-icon/image-placeholder-icon-6.jpg" />
-                <UploadButton onClick={handlePic} className=' w-3/5 self-center rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500' />
+                
+                
+                <UploadButton className='size-5 w-3/5 self-center rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500'  />
+                <UploadComponent  onFilesUploaded={handleFilesUploaded} />
+
               </Uploady>
             </div>
           </div>
@@ -489,7 +611,6 @@ defaultValue=" "
 
           </div>
         </form>
-
 
         <div style={{ position: 'relative', height: '100%', justifyContent: 'center', color: 'black' }} className="w-1/4">
           <div style={{ overflowY: 'auto', maxHeight: '80vh', padding: '10px', background: 'linear-gradient(to top, #4058b9  5%, #babccf 30%)', height: '43vh', border: '0px', borderRadius: '15px' }}>
