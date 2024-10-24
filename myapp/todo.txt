@@ -46,3 +46,5 @@ it is submitting uupon picture upload
 handle the sign in both back and front
 
 work on the error replies
+
+user and favourites

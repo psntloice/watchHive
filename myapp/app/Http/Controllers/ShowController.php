@@ -35,14 +35,19 @@ class ShowController extends Controller
         Log::info($movies);
 
         // Make sure to return the response
-        return Show::with(['genres', 'actors', 'author'])->get();
+        return Show::with(['genres', 'actors', 'author'])
+        ->orderBy('id', 'desc')
+        ->get();
 
         return response()->json($movies);
     }
     public function releases()
     {
         //   return  Log::info(Carbon::today());
-        return   Show::whereDate('first_release_date', '>', Carbon::today())->with(['genres', 'actors', 'author'])->get();
+        return   Show::whereDate('first_release_date', '>=', Carbon::today())
+        ->with(['genres', 'actors', 'author'])
+        ->orderBy('first_release_date', 'desc')
+        ->get();
     }
     public function show($id)
     {
@@ -53,7 +58,7 @@ class ShowController extends Controller
     {
         try {
             Log::info('Request Data:', $request->all());
-            // Log::info('Uploaded File:', $request->file('picture_url'));            // Step 1: Validate the request
+            Log::info('Uploaded File:', $request->file('genre_id'));            // Step 1: Validate the request
             $validatedData = $request->validate([
                 'title' => 'required|string|max:255',
                 'type' => 'required|string',
@@ -68,7 +73,7 @@ class ShowController extends Controller
                 'description' => 'string',
                 'picture_url' => 'image|max:2048'
             ]);
-// echo  $validatedData;
+echo  $validatedData;
             // Step 2: Handle the image upload
             if ($request->hasFile('picture_url')) {
                 $image = $request->file('picture_url');
@@ -100,35 +105,36 @@ class ShowController extends Controller
                 'description' => $validatedData['description'],             
                 'author_id' => $validatedData['author_id'],
                 'picture_url' => $validatedData['picture_url'],
+                'sequel_id' => $validatedData['sequel_id'],
                 'has_sequel' => $validatedData['has_sequel'] ?? false,
                 'is_upcoming' => $validatedData['is_upcoming'] ?? false,
             ]);
         
-            // if ($show) {
-            //     $genres = $validatedData['genre_id'];
-            //     $genreIds = [];
-            //     foreach ($genres as $id) {
-            //         $genre = Genre::firstOrCreate(['id' => $id]);
-            //         $genreIds[] = $genre->id;
-            //     }
-            //     $show->genres()->syncWithoutDetaching($genreIds);
+            if ($show) {
+                // $genres = $validatedData['genre_id'];
+                // $genreIds = [];
+                // foreach ($genres as $id) {
+                //     $genre = Genre::firstOrCreate(['id' => $id]);
+                //     $genreIds[] = $genre->id;
+                // }
+                // $show->genres()->syncWithoutDetaching($genreIds);
 
-            //     $actors = $validatedData['actor_id'];
-            //     $actorIds = [];
-            //     foreach ($actors as $id) {
-            //         $actor = Actor::firstOrCreate(['id' => $id]);
-            //         $actorIds[] = $actor->id;
-            //     }
-            //     $show->actors()->syncWithoutDetaching($actorIds);
+                $actors = $validatedData['actor_id'];
+                $actorIds = [];
+                foreach ($actors as $id) {
+                    $actor = Actor::firstOrCreate(['id' => $id]);
+                    $actorIds[] = $actor->id;
+                }
+                $show->actors()->syncWithoutDetaching($actorIds);
 
-            //     // Successfully created the Show
-            //     error_log("Successfully created the Show: " . json_encode($show));
-            //     return response()->json($show, 201);
-            // } else {
-            //     // Failed to create the Show
-            //     error_log("Failed to create the Show.");
-            //     return response()->json(['error' => 'Failed to create the Show.'], 500);
-            // }
+                // Successfully created the Show
+                error_log("Successfully created the Show: " . json_encode($show));
+                return response()->json($show, 201);
+            } else {
+                // Failed to create the Show
+                error_log("Failed to create the Show.");
+                return response()->json(['error' => 'Failed to create the Show.'], 500);
+            }
         } catch (\Exception $e) {
             // Catch any unexpected exceptions
             error_log("Exception occurred: " . $e->getMessage());

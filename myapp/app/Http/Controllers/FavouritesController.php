@@ -39,7 +39,9 @@ class FavouritesController extends Controller
 
     public function destroy($id)
     {
-        Favourites::destroy($id);
+        // Favourites::destroy($id);
+        return  Favourites::where('show_id', $id)->delete();
+
         return response()->noContent();
     }
 }

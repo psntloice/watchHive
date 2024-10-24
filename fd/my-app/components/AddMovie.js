@@ -2,7 +2,6 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { Input } from "@nextui-org/input";
 import { DatePicker } from "@nextui-org/date-picker";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
-import { css } from '@nextui-org/react';
 import Uploady, {useItemFinishListener, useBatchAddListener, useUploady } from '@rpldy/uploady';
 import UploadButton from "@rpldy/upload-button";
 import UploadPreview from "@rpldy/upload-preview";
@@ -19,29 +18,27 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query';
-
 import { get_call_module, post_call_module, put_call_module, delete_call_module } from '../utils/module_call';
 
-const queryClient = new QueryClient();
+
+//uploadcomponent
 const UploadComponent = ({ onFilesUploaded }) => {
-  
+    //states
   const [files, setFiles] = useState([]);
   const [finished, setFinished] = useState([]);
+
   // Hook to listen for new files added
   useBatchAddListener((batch) => {
     setFiles((prevFiles) => [...prevFiles, ...batch.items.map(item => item.file)]);
   });
-   // Log finished uploads when they are updated
-   useEffect(() => {
-    console.log("Finished uploads:", finished);
-  }, [finished]);
+ 
+  //functions
   const handleFileUpload = async () => {
     try {
       for (let file of files) {
         const formData = new FormData();
         formData.append('file', file);
       }
-      console.log(files);
       const uploadFiles = files.map((file) => {
         return {
             file: file, // Send the uploaded file along with other data
@@ -68,78 +65,45 @@ Submit      </button>
     </div>
   );
 };
+
+
+//main form
 const ActorForm = () => {
+    //environment and variables
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const initialMovieData = {
+      title: '',
+      type: '',
+      first_release_date: '',
+      next_release_date: '',
+      author_id: null,
+      genre_id: [],
+      actor_id: [],
+      has_sequel: '',
+      sequel_id: null,
+      is_upcoming: '',
+      description: '',
+      // Add other fields if necessary
+    };
+    const settings = {
+      infinite: false,
+      speed: 500,
+      slidesToShow: 10, // Adjust this based on the number of images you want visible at once
+      slidesToScroll: 1, // Number of slides to scroll at once
+      centerMode: false, // Do not center the active slide
+    };
+    const myboolean = [0, 1];
+    const myType = ["Movie", "Series"];
+
+    //states
   const [go, setGo] = useState(false);
-  const toggleGo = () => {
-    setGo(!go);
-  };
-  const handleFilesUploaded = (files) => {
-    console.log('My Uploaded files:', files);
-    if (files.length > 0) {
-      setMovieData((prevData) => ({
-        ...prevData,
-        picture_url: files[0].file, // Store the first selected file
-      }));
-    }
-  };
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const initialMovieData = {
-    title: '',
-    type: '',
-    first_release_date: '',
-    next_release_date: '',
-    author_id: null,
-    genre_id: [],
-    actor_id: [],
-    has_sequel: '',
-    sequel_id: null,
-    is_upcoming: '',
-    description: '',
-    // Add other fields if necessary
-  };
   const [newmovieData, setMovieData] = useState(initialMovieData);
-  const [renewMovie, resetNewMovie] = useState({ rename: '', redescription: '' });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewMovie(prevState => ({ ...prevState, [name]: value }));
-  };
-  const rehandleChange = (e) => {
-    const { name, value } = e.target;
-    resetNewMovie(prevState => ({ ...prevState, [name]: value }));
-  };
-  const toggleMovie = (id) => {
-    setActiveMovieId(activeMovieId === id ? null : id);
-  };
-  const HoverDiv = (id) => {
-    setActiveDivId(activeDivId === id ? null : id);
-  };
   const [activeMovieId, setActiveMovieId] = useState(null);
-  const [activeDivId, setActiveDivId] = useState(null);
-  const settings = {
-    infinite: false,
-    speed: 500,
-    slidesToShow: 10, // Adjust this based on the number of images you want visible at once
-    slidesToScroll: 1, // Number of slides to scroll at once
-    centerMode: false, // Do not center the active slide
-  };
-
   const [selectedValue, setSelectedValue] = useState("true");  // default to string "true"
-
-  const handleSelectChange = (e) => {
-    setSelectedValue(e.target.value);
-  };
+  const [isActive, setIsActive] = useState({});
 
 
-  const addMovie = async (payload) => {
-    try {
-      console.log(payload);
-      const data = await post_call_module(payload, "shows");
-      console.log(data); // Log the authors data
-      return data;
-    } catch (error) {
-      console.error('Error adding:', error);
-    }
-  };
+  //calls to api
   const getMovie = async () => {
     try {
       const data = await get_call_module("shows")
@@ -201,11 +165,42 @@ const ActorForm = () => {
       console.error('Error fetching authors:', error);
     }
   };
+  const removeFromFavs = async (id) => {
+    try {
+      const data = await delete_call_module("favourites", id);
+      // refetch();
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error deleting authors:', error);
+    }
+  };
+  const addToFavourites = async (payload) => {
+    try {
+      const data = await post_call_module(payload, "favourites");
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error adding:', error);
+    }
+  }
+  const getFavourites = async () => {
+    try {
+      const data = await get_call_module("favourites")
+      console.log(data); // Log the authors data
+      return data;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+    }
+  };
+  const { isLoading: isFavLoading, data: favData, error: favError } = useQuery({
+    queryKey: ['favs'],
+    queryFn: getFavourites,
+  })
   const { isLoading: isMovieLoading, data: movieData, error: movieError, refetch } = useQuery({
     queryKey: ['movies'],
     queryFn: getMovie,
   })
-  // console.log(movieData);
   const { isLoading: isAuthorLoading, data: authorData, error: authorError } = useQuery({
     queryKey: ['authors'],
     queryFn: getAuthor,
@@ -218,6 +213,36 @@ const ActorForm = () => {
     queryKey: ['genres'],
     queryFn: getGenre,
   })
+
+  //fuctions
+  const toggleGo = () => {
+    setGo(!go);
+  };
+  const handleFilesUploaded = (files) => {
+    console.log('My Uploaded files:', files);
+    if (files.length > 0) {
+      setMovieData((prevData) => ({
+        ...prevData,
+        picture_url: files[0].file, // Store the first selected file
+      }));
+    }
+  };
+  const toggleMovie = (id) => {
+    setActiveMovieId(activeMovieId === id ? null : id);
+  };
+  const handleFavourites = (id) => {
+    const payload = {
+      user_id: 1,
+      show_id: id,
+    };
+    if(isActive[pickedMovie.id]){removeFromFavs(id);}
+    else if(!(isActive[pickedMovie.id])){addToFavourites(payload);}
+    setIsActive((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id], // Toggle the current value for the specific showId
+    }));
+
+  };
   const handleAddMovie = async () => {
     console.log(newmovieData);
     // e.preventDefault();
@@ -241,21 +266,39 @@ const ActorForm = () => {
 
     const formData = new FormData();
     
-  // Append movie data
+//   // Append movie data
+// for (const key in newmovieData) {
+//   const value = newmovieData[key];
+  
+//   // Handle null values
+//   if (value === null) {
+//     formData.append(key, ''); // Send as an empty string for null
+//   } else {
+//     formData.append(key, value); // Append the value directly
+//   }
+
+//   // Debugging: log the value and the current state of FormData
+//   console.log(`${key}:`, value);
+// }
+
+// Append movie data
 for (const key in newmovieData) {
   const value = newmovieData[key];
-  
-  // Handle null values
-  if (value === null) {
+
+  if (Array.isArray(value)) {
+    // If the value is an array, JSON.stringify the entire array
+    formData.append(key, JSON.stringify(value));
+  } else if (value === null) {
+    // Handle null values
     formData.append(key, ''); // Send as an empty string for null
   } else {
-    formData.append(key, value); // Append the value directly
+    // Append the value directly
+    formData.append(key, value);
   }
 
   // Debugging: log the value and the current state of FormData
   console.log(`${key}:`, value);
 }
-
       // Log the FormData contents
   for (const pair of formData.entries()) {
     console.log(`${pair[0]}: ${pair[1]}`);
@@ -284,39 +327,48 @@ console.log (newmovieData);
     //     refetch();
 
   };
-  const handleReSubmit = async (e, tid) => {
-    e.preventDefault();
-    if (tid) {
-      await updateAuthor(tid, renewAuthor);
-      resetNewAuthor({ rename: '', redescription: '' });
-      refetch();
-      setActiveDivId(activeDivId === tid ? null : null);
-    }
+
+   //useeffects
+// useEffect(() => {
+//   // Check if both pickedMovie and favData are available
+//   if (pickedMovie && favData) {
+//     // Perform your desired action here
+//     console.log("Picked Movie:", pickedMovie);
+//     console.log("Favorites Loaded:", favData);
+
+//     // Example action: Check if the picked movie is in the favorites
+//     const isFavorite = favData.some(movie => movie.show_id === pickedMovie.id);
+//     console.log("Is Picked Movie a Favorite?", isFavorite);
+// if(isFavorite)
+// {
+//   setIsActive((prevState) => ({
+//     ...prevState,
+//     [pickedMovie.id]: true, // Toggle the current value for the specific showId
+//   }));
+//   console.log(isActive)
+//   console.log(isActive[pickedMovie.id])
+// }
+// else if(!isFavorite)
+// {
+//   setIsActive((prevState) => ({
+//     ...prevState,
+//     [pickedMovie.id]: false, // Toggle the current value for the specific showId
+//   }));
+//   console.log(isActive)
+
+// }
+//     // You can also set state or perform other actions based on this check
+//     if (isFavorite) {
+//       // Maybe set some state or display a message
+//       console.log("This movie is in your favorites!");
+//     } else {
+//       console.log("This movie is not in your favorites.");
+//     }
+//   }
+// }, [pickedMovie, favData]);
 
 
-  };
-  const addToFavourites = async (payload) => {
-    try {
-      const data = await post_call_module(payload, "favourites");
-      console.log(data); // Log the authors data
-      return data;
-    } catch (error) {
-      console.error('Error adding:', error);
-    }
-  }
-  const [isActive, setIsActive] = useState(false);
-  const handleFavourites = (id) => {
-    console.log(id);
-    const payload = {
-      user_id: 1,
-      show_id: id,
-    };
-    // addToFavourites(payload);
-    setIsActive((prev) => !prev);
-
-  };
-  const myboolean = [0, 1];
-  const myType = ["Movie", "Series"];
+//ifs and their fumctions
   if (isAuthorLoading || isActorLoading || isGenreLoading || isMovieLoading) return 'Loading...'
   if (authorError || actorError || genreError || movieError) return 'An error has occurred: ' + (authorError?.message || actorError?.message || genreError?.message || movieError?.message)
 
@@ -597,8 +649,8 @@ defaultValue=" "
                   <div style={{
                     display: 'flex'
                   }}> <h3>{movie.title} ({movie.type}) </h3>
-                    <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} onClick={() => handleFavourites(pickedMovie.id)}>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill={isActive ? 'red' : 'transparent'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
+                    <button className="flex justify-self-center max-w-max content-start bg-transparent" style={{ background: 'transparent' }} onClick={() => handleFavourites(movie.id)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill={isActive[movie.id] ? 'red' : 'transparent'} viewBox="0 0 24 24" strokeWidth={1.5} stroke="blue" className="size-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                       </svg>
                     </button>
@@ -693,3 +745,44 @@ defaultValue=" "
 
 export default ActorForm;
 
+// const queryClient = new QueryClient();
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setNewMovie(prevState => ({ ...prevState, [name]: value }));
+  // };
+  // const rehandleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   resetNewMovie(prevState => ({ ...prevState, [name]: value }));
+  // };
+  // const [renewMovie, resetNewMovie] = useState({ rename: '', redescription: '' });
+ // const HoverDiv = (id) => {
+  //   setActiveDivId(activeDivId === id ? null : id);
+  // };
+
+   // const handleSelectChange = (e) => {
+  //   setSelectedValue(e.target.value);
+  // };
+
+
+  // const addMovie = async (payload) => {
+  //   try {
+  //     console.log(payload);
+  //     const data = await post_call_module(payload, "shows");
+  //     console.log(data); // Log the authors data
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Error adding:', error);
+  //   }
+  // };
+  // const handleReSubmit = async (e, tid) => {
+  //   e.preventDefault();
+  //   if (tid) {
+  //     await updateAuthor(tid, renewAuthor);
+  //     resetNewAuthor({ rename: '', redescription: '' });
+  //     refetch();
+  //     setActiveDivId(activeDivId === tid ? null : null);
+  //   }
+
+
+  // };
